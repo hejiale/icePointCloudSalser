@@ -231,7 +231,6 @@
 		CBEDD46720074ABC00F78C9A /* IPCSaleserOptometryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBEDD46620074ABC00F78C9A /* IPCSaleserOptometryView.xib */; };
 		CBF0F6001FC69D3400647A42 /* IPCPayCashIntegralTrade.m in Sources */ = {isa = PBXBuildFile; fileRef = CBF0F5FF1FC69D3400647A42 /* IPCPayCashIntegralTrade.m */; };
 		CBF0F6031FC6BCA900647A42 /* IPCEmployee.m in Sources */ = {isa = PBXBuildFile; fileRef = CBF0F6021FC6BCA900647A42 /* IPCEmployee.m */; };
-		CBF9357D1FCFE8E800D844AB /* TuSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CBF9357C1FCFE8E800D844AB /* TuSDK.bundle */; };
 		FF07315BA77B96D5DB3A8005 /* Pods_IcePointCloudSalser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6544779C1E58E9C62B6E937 /* Pods_IcePointCloudSalser.framework */; };
 /* End PBXBuildFile section */
 
@@ -632,7 +631,6 @@
 		CBF0F6011FC6BCA900647A42 /* IPCEmployee.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IPCEmployee.h; sourceTree = "<group>"; };
 		CBF0F6021FC6BCA900647A42 /* IPCEmployee.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IPCEmployee.m; sourceTree = "<group>"; };
 		CBF9357B1FCFA7B200D844AB /* IPCCustomTextFieldDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IPCCustomTextFieldDelegate.h; sourceTree = "<group>"; };
-		CBF9357C1FCFE8E800D844AB /* TuSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TuSDK.bundle; sourceTree = "<group>"; };
 		D57A18F14EE64419E926539B /* Pods-IcePointCloud.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IcePointCloud.release.xcconfig"; path = "Pods/Target Support Files/Pods-IcePointCloud/Pods-IcePointCloud.release.xcconfig"; sourceTree = "<group>"; };
 		E6544779C1E58E9C62B6E937 /* Pods_IcePointCloudSalser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IcePointCloudSalser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F272C35358B3784119157525 /* Pods-IcePointCloudSalser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IcePointCloudSalser.release.xcconfig"; path = "Pods/Target Support Files/Pods-IcePointCloudSalser/Pods-IcePointCloudSalser.release.xcconfig"; sourceTree = "<group>"; };
@@ -757,7 +755,6 @@
 		9E03C2DB1978D5D5007389D0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				CBF9357C1FCFE8E800D844AB /* TuSDK.bundle */,
 				9E03C2EC1978D5D5007389D0 /* Images.xcassets */,
 				9E03C2DC1978D5D5007389D0 /* IcePointCloudSalser-Info.plist */,
 				9E03C2E01978D5D5007389D0 /* main.m */,
@@ -1992,7 +1989,6 @@
 				CB0F56571F988B05003707F2 /* IPCDatePickViewController.xib in Resources */,
 				CB0F54E71F98819C003707F2 /* IPCEditParameterCell.xib in Resources */,
 				CB1234811FFB74990058963F /* IPCSaleserShopperViewController.xib in Resources */,
-				CBF9357D1FCFE8E800D844AB /* TuSDK.bundle in Resources */,
 				CB0F54161F988191003707F2 /* IPCGlassParameterView.xib in Resources */,
 				CB1234771FFB74650058963F /* IPCOptometryViewController.xib in Resources */,
 				CB0F54371F988191003707F2 /* IPCSaleserShoppingCartView.xib in Resources */,
