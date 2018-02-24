@@ -16,7 +16,6 @@
 		04378D751D90F59000E37096 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04378D741D90F59000E37096 /* Foundation.framework */; };
 		04378D771D90F59700E37096 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04378D761D90F59700E37096 /* UIKit.framework */; };
 		04378D791D90F59F00E37096 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04378D781D90F59F00E37096 /* Security.framework */; };
-		044EB11F1D701335009CE553 /* iflyMSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04870F7D1D70050C009F3574 /* iflyMSC.framework */; };
 		044EB1221D701348009CE553 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04C9B1391D70028A001E94FB /* CoreTelephony.framework */; };
 		044EB1241D7013A4009CE553 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 044EB1231D7013A4009CE553 /* libz.tbd */; };
 		044EB1261D7013D6009CE553 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 044EB1251D7013D6009CE553 /* AudioToolbox.framework */; };
@@ -260,7 +259,6 @@
 		044EB1291D701407009CE553 /* libc.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libc.tbd; path = usr/lib/libc.tbd; sourceTree = SDKROOT; };
 		0460CE1A1DF8054E00700A18 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		0479F29A1E09205900816E02 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		04870F7D1D70050C009F3574 /* iflyMSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iflyMSC.framework; path = IcePointCloud/lib/iflyMSC.framework; sourceTree = "<group>"; };
 		04AD9C841DE2DB93001EB959 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		04B1D2011D867CC800D9B865 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		04C9B1391D70028A001E94FB /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -659,7 +657,6 @@
 				04B1D2021D867CC800D9B865 /* Photos.framework in Frameworks */,
 				044EB12A1D701407009CE553 /* libc.tbd in Frameworks */,
 				044EB1261D7013D6009CE553 /* AudioToolbox.framework in Frameworks */,
-				044EB11F1D701335009CE553 /* iflyMSC.framework in Frameworks */,
 				9EF39A2C1B28054F00CEE1D3 /* CoreImage.framework in Frameworks */,
 				9EF39A241B28053200CEE1D3 /* CoreVideo.framework in Frameworks */,
 				FF07315BA77B96D5DB3A8005 /* Pods_IcePointCloudSalser.framework in Frameworks */,
@@ -722,7 +719,6 @@
 				04C9B1391D70028A001E94FB /* CoreTelephony.framework */,
 				9EF39A231B28053200CEE1D3 /* CoreVideo.framework */,
 				04378D741D90F59000E37096 /* Foundation.framework */,
-				04870F7D1D70050C009F3574 /* iflyMSC.framework */,
 				044EB1291D701407009CE553 /* libc.tbd */,
 				044EB1231D7013A4009CE553 /* libz.tbd */,
 				04AD9C841DE2DB93001EB959 /* MapKit.framework */,
@@ -2441,7 +2437,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/IcePointCloudSalser/Vendors",
-					"$(PROJECT_DIR)/IcePointCloudSalser/lib",
 					"$(inherited)",
 				);
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -2495,7 +2490,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/IcePointCloudSalser/Vendors",
-					"$(PROJECT_DIR)/IcePointCloudSalser/lib",
 					"$(inherited)",
 				);
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -2668,7 +2662,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/IcePointCloudSalser/Vendors",
-					"$(PROJECT_DIR)/IcePointCloudSalser/lib",
 					"$(inherited)",
 				);
 				GCC_NO_COMMON_BLOCKS = YES;
