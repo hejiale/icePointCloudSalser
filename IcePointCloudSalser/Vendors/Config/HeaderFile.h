@@ -25,7 +25,6 @@
 #import "IPCDynamicImageTextButton.h"
 #import "IPCEmptyAlertView.h"
 #import "IPCAlertController.h"
-#import "IPCPersonContentView.h"
 #import "IPCCustomKeyboard.h"
 
 /**
@@ -59,7 +58,6 @@
  *  Category
  */
 #import "UIViewController+Extend.h"
-#import "UIImage+Face.h"
 #import "UIView+Border.h"
 #import "UITableView+Alert.h"
 #import "UICollectionView+Alert.h"
@@ -68,7 +66,6 @@
 #import "NSDictionary+DeleteNull.h"
 #import   "AFHTTPSessionManager+Extend.h"
 #import "UILabel+Extend.h"
-#import "UIButton+TouchArea.h"
 #import "NSObject+IPCObserver.h"
 
 #endif /* HeaderFile_h */

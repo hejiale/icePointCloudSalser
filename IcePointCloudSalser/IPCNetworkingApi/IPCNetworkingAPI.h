@@ -46,7 +46,6 @@
 
 
 #define PayOrderRequest_CompanyConfig            @"companyAdmin.getCompanyConfig"
-//#define PayOrderRequest_GetAuths                      @"bizadmin.getAuths"  获取全部权限
 #define PayOrderRequest_ListPayType                  @"payTypeConfigAdmin.listPayType"
 #define PayOrderRequest_ListOrderType               @"bizadmin.listOrderByType"
 #define PayOrderRequest_EmployeeList                 @"employeeadmin.listEmployee"

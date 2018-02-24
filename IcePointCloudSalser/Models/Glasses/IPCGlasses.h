@@ -7,15 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "IPCGlassesImage.h"
 
 @interface IPCGlasses : NSObject
-
-///Each Image
-@property (nonatomic, strong, readwrite) IPCGlassesImage *profileDisplayImage;
-@property (nonatomic, strong, readwrite) IPCGlassesImage *frontialDisplayImage;
-@property (nonatomic, strong, readwrite) IPCGlassesImage *frontialTryOnImage;
-@property (nonatomic, strong, readwrite) IPCGlassesImage *thumbImage;
 
 @property (nonatomic, copy, readonly) NSString * glassName;//name
 @property (nonatomic, copy, readonly) NSString * glassesID;// id
@@ -47,7 +40,6 @@
 @property (nonatomic, assign, readonly) BOOL        isTryOn;//If you can try
 @property (nonatomic, assign, readonly) NSInteger  stock;//inventory
 
-- (IPCGlassesImage *)imageWithType:(IPCGlassesImageType)type;
 - (IPCTopFilterType)filterType;
 - (NSString *)glassType;
 - (NSString *)glassId;

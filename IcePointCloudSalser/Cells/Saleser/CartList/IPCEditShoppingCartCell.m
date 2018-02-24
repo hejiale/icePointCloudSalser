@@ -26,9 +26,6 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
-
-    [self.addButton setLargeEdgeWithTop:5 right:5 bottom:5 left:5];
-    [self.reduceButton setLargeEdgeWithTop:5 right:5 bottom:5 left:5];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

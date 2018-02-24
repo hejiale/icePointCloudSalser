@@ -19,11 +19,6 @@ extern NSString *const IPCFirstLanuchKey;
 extern NSString* const IPCUserNameKey;
 //Store all your login history record Key
 extern NSString *const IPCListLoginHistoryKey;
-//Keep records of commodity search key
-extern NSString *const IPCSearchHistoryListKey;
-//Save search Key users
-extern NSString *const IPCSearchCustomerkey;
-//Inform the screening homepage search goods
 //Shopping cart change notification
 extern NSString *const IPCShoppingCartCountKey;
 //Error Networking Status Message
@@ -36,7 +31,6 @@ extern NSString * const IPCGetProtyOrderNotification;
 
 @interface IPCAppManager : NSObject
 
-@property (nonatomic, assign, readwrite)     BOOL                          isPayOrderStatus;
 @property (nonatomic, copy, readwrite)       NSString                   * deviceToken;
 @property (nonatomic, strong, readwrite)    IPCStoreResult          * storeResult;
 @property (nonatomic, strong, readwrite)    IPCWareHouseResult * wareHouse;

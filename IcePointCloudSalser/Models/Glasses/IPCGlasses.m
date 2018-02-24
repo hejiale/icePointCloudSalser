@@ -11,29 +11,6 @@
 
 @implementation IPCGlasses
 
-/**
- *  Glasses pictures in various directions
- *
- *  @param type
- *
- *  @return
- */
-- (IPCGlassesImage *)imageWithType:(IPCGlassesImageType)type
-{
-    switch (type) {
-        case IPCGlassesImageTypeFrontialMatch:
-            return self.frontialTryOnImage;
-        case IPCGlassesImageTypeFrontialNormal:
-            return self.frontialDisplayImage;
-        case IPCGlassesImageTypeProfileNormal:
-            return self.profileDisplayImage;
-        case IPCGlassesImageTypeThumb:
-            return self.thumbImage;
-        default:
-            return nil;
-    }
-}
-
 
 /**
  *  Glasses type

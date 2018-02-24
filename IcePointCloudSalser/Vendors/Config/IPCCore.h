@@ -158,13 +158,6 @@ typedef NS_ENUM(NSInteger, IPCEditKeyboardType) {
 //Color
 #define COLOR_RGB_BLUE              [UIColor jk_colorWithHexString:@"#63a0d4"]
 #define COLOR_RGB_RED                [UIColor jk_colorWithHexString:@"#FF0000"]
-//Account Key
-#define IPCWeixinAppID                 @"wx94ce99b4ee7c5356"
-#define IPCWeixinAppSecret           @"12a16d241dfcc9133783f4e3e8a47c59"
-//TuSDK_key
-#define IPCTuSdkKey                      @"76f28d5c99160928-00-rzltq1"
-//IFLY_FACE_KEY
-#define IPCIflyFaceDetectorKey       @"5774da82"
 //Bugtags_Key
 #define IPCBugtagsKey                   @"684c431f1975ccb3731c51cd2dff6536"
 
