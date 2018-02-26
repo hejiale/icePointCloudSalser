@@ -70,11 +70,6 @@ extern NSString * const IPCGetProtyOrderNotification;
  */
 - (NSArray *)loginAccountHistory;
 
-/**
- *  Access to different location of the model photos
- */
-+ (UIImage *)modelPhotoWithType:(IPCModelType)type usage:(IPCModelUsage)usage;
-
 
 /**
  Query Employee Account

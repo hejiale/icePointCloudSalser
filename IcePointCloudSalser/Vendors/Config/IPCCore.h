@@ -10,51 +10,6 @@
 #define IPCCore_h
 
 
-/**
- *  FACE TYPE
- */
-typedef NS_ENUM(NSInteger, IPCPhotoType) {
-    /**
-     *  MODEL
-     */
-    IPCPhotoTypeModel,
-    /**
-     *  FRONT
-     */
-    IPCPhotoTypeFrontial
-};
-
-/**
- *  MODEL TYPE
- */
-typedef NS_ENUM(NSInteger, IPCModelType) {
-    /**
-     *  LOGN
-     */
-    IPCModelTypeGirlWithLongHair = 1,
-    /**
-     *  SHORT
-     */
-    IPCModelTypeGirlWithShortHair,
-    /**
-     *  MAN
-     */
-    IPCModelTypeMan,
-};
-
-/**
- *  PERSON MATCH
- */
-typedef NS_ENUM(NSInteger, IPCModelUsage) {
-    /**
-     *  SINGLE MATCH
-     */
-    IPCModelUsageSingleMode,
-    /**
-     *  COMPARE MATCH
-     */
-    IPCModelUsageCompareMode,
-};
 
 /**
  *  GLASS CLASS
@@ -98,27 +53,6 @@ typedef NS_ENUM(NSInteger, IPCTopFilterType) {
     IPCTopFilterTypeOthers,
 };
 
-/**
- *  GLASS SHOW POSITION
- */
-typedef NS_ENUM(NSInteger, IPCGlassesImageType) {
-    /**
-     *  FRONT NORMAL
-     */
-    IPCGlassesImageTypeFrontialNormal = 0,
-    /**
-     *  FRONT MATCH
-     */
-    IPCGlassesImageTypeFrontialMatch,
-    /**
-     *  PROFILE NORMAL
-     */
-    IPCGlassesImageTypeProfileNormal,
-    /**
-     *   THUMB
-     */
-    IPCGlassesImageTypeThumb
-};
 
 typedef enum : NSUInteger {
     /**

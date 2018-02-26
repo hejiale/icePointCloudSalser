@@ -95,7 +95,6 @@ NSString * const kIPCNotConnectInternetMessage         = @"连接服务出错了
 {
     ///Clear All Data & Clear HTTP Request
     [[IPCAppManager sharedManager] clearData];
-    [[IPCTryMatch instance] clearData];
     [[IPCPayOrderManager sharedManager] resetData];
     [[IPCHttpRequest sharedClient] cancelAllRequest];
     
@@ -133,29 +132,6 @@ NSString * const kIPCNotConnectInternetMessage         = @"连接服务出错了
     return accountHistory;
 }
 
-
-+ (UIImage *)modelPhotoWithType:(IPCModelType)type usage:(IPCModelUsage)usage
-{
-    int index = type;
-    NSString *suffix = nil;
-    
-    switch (usage) {
-        case IPCModelUsageCompareMode:
-            suffix = @"mid";
-            break;
-        case IPCModelUsageSingleMode:
-            suffix = @"large";
-            break;
-        default:
-            break;
-    }
-    
-    if (suffix) {
-        NSString *imgName = [NSString stringWithFormat:@"model%i_%@", index, suffix];
-        return [UIImage imageNamed:imgName];
-    }
-    return nil;
-}
 
 - (void)queryEmployeeAccount:(void(^)(NSError *))complete
 {

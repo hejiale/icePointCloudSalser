@@ -47,13 +47,12 @@
 #import "IPCPayOrderManager.h"
 #import "IPCBatchDegreeObject.h"
 #import "IPCCustomerManager.h"
-#import "IPCTryMatch.h"
 #import "IPCWareHouse.h"
 #import "IPCTextFiledControl.h"
 #import "IPCBatchGlassesConfig.h"
 #import "IPCKeyboardManager.h"
 #import "IPCSaleserProduct.h"
-
+#import "IPCGlasses.h"
 /**
  *  Category
  */
