@@ -7,7 +7,6 @@ platform :ios, ‘8.0’
 target "IcePointCloudSalser" do
 
 pod 'AFNetworking'
-pod 'JSONKit-NoWarning'
 pod 'IQKeyboardManager'
 pod 'Masonry'
 pod 'MJExtension'

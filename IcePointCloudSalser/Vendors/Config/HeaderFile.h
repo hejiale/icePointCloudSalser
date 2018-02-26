@@ -52,7 +52,6 @@
 #import "IPCBatchGlassesConfig.h"
 #import "IPCKeyboardManager.h"
 #import "IPCSaleserProduct.h"
-#import "IPCGlasses.h"
 /**
  *  Category
  */

@@ -39,11 +39,7 @@
 #define CustomerRequest_ValidateCustomer        @"customerAdmin.validateCustomerQRcode"
 #define CustomerRequest_UpdateMemberPhone   @"customerAdmin.updateCustomerMemberPhone"
 
-#define GoodsRequest_FilterCategory                    @"bizadmin.getCategoryType"
-#define GoodsRequest_GoodsList                          @"bizadmin.filterTryGlasses"
-#define GoodsRequest_RecommdList                     @"productAdmin.searchTryGlasses"
 #define GoodsRequest_PriceStrategy                     @"productAdmin.listPriceStrategyForListProduct"
-
 
 #define PayOrderRequest_CompanyConfig            @"companyAdmin.getCompanyConfig"
 #define PayOrderRequest_ListPayType                  @"payTypeConfigAdmin.listPayType"

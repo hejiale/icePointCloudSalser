@@ -362,7 +362,7 @@ static NSString * const identifier = @"ChooseBatchParameterCellIdentifier";
 #pragma mark //加入购物车
 - (void)addLensToCart
 {
-    __block IPCGlasses * glass = self.glasses;
+    __block IPCSaleserProduct * glass = self.glasses;
     
     if ([_glasses filterType] == IPCTopFilterTypeLens){
         [[IPCShoppingCart sharedCart] addLensWithGlasses:glass

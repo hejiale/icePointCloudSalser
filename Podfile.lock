@@ -19,7 +19,6 @@ PODS:
   - Bugtags/Core (2.4.2)
   - IQKeyboardManager (5.0.6)
   - JKCategories (1.6)
-  - JSONKit-NoWarning (1.2)
   - Masonry (1.1.0)
   - MBProgressHUD (1.1.0)
   - MJExtension (3.0.13)
@@ -35,7 +34,6 @@ DEPENDENCIES:
   - Bugtags
   - IQKeyboardManager
   - JKCategories
-  - JSONKit-NoWarning
   - Masonry
   - MBProgressHUD
   - MJExtension
@@ -49,7 +47,6 @@ SPEC CHECKSUMS:
   Bugtags: 03318eafb02ec71e6c65c48c3a2b0ef34ed45eee
   IQKeyboardManager: 077b7f691dfa9d69db9cff66f2bed68ebfc02d9b
   JKCategories: dab1bd3f7500836c5066d09052b85c12a963db12
-  JSONKit-NoWarning: 3d27e6f9e6846ecf741e8c64dcadd7d5aa7193cb
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   MJExtension: 5932755f451458eefa24239358817f8d291240c7
@@ -58,6 +55,6 @@ SPEC CHECKSUMS:
   ReactiveObjC: ce79989e8684b9086b5f8d0c74bc7b81a8729c9e
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: 0d6eba7c9a5b9fe41652597d06e4ed3a2d3a7e73
+PODFILE CHECKSUM: 54b97d5c300d8f1b5695c03f9bd05ec149ef0082
 
 COCOAPODS: 1.4.0

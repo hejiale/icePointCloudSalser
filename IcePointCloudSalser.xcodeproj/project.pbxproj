@@ -65,7 +65,6 @@
 		CB0F55A21F98845A003707F2 /* IPCEmployeeList.m in Sources */ = {isa = PBXBuildFile; fileRef = CB0F55501F98845A003707F2 /* IPCEmployeeList.m */; };
 		CB0F55A31F98845A003707F2 /* IPCCustomerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CB0F55521F98845A003707F2 /* IPCCustomerManager.m */; };
 		CB0F55A81F98845A003707F2 /* IPCFilterDataSourceResult.m in Sources */ = {isa = PBXBuildFile; fileRef = CB0F555E1F98845A003707F2 /* IPCFilterDataSourceResult.m */; };
-		CB0F55A91F98845A003707F2 /* IPCGlasses.m in Sources */ = {isa = PBXBuildFile; fileRef = CB0F55611F98845A003707F2 /* IPCGlasses.m */; };
 		CB0F55AC1F98845A003707F2 /* IPCPayOrderCurrentCustomer.m in Sources */ = {isa = PBXBuildFile; fileRef = CB0F55681F98845A003707F2 /* IPCPayOrderCurrentCustomer.m */; };
 		CB0F55AD1F98845A003707F2 /* IPCCustomerTypeList.m in Sources */ = {isa = PBXBuildFile; fileRef = CB0F556A1F98845A003707F2 /* IPCCustomerTypeList.m */; };
 		CB0F55B01F98845A003707F2 /* IPCMemberLevelList.m in Sources */ = {isa = PBXBuildFile; fileRef = CB0F55701F98845A003707F2 /* IPCMemberLevelList.m */; };
@@ -336,8 +335,6 @@
 		CB0F55521F98845A003707F2 /* IPCCustomerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPCCustomerManager.m; sourceTree = "<group>"; };
 		CB0F555D1F98845A003707F2 /* IPCFilterDataSourceResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPCFilterDataSourceResult.h; sourceTree = "<group>"; };
 		CB0F555E1F98845A003707F2 /* IPCFilterDataSourceResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPCFilterDataSourceResult.m; sourceTree = "<group>"; };
-		CB0F55601F98845A003707F2 /* IPCGlasses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPCGlasses.h; sourceTree = "<group>"; };
-		CB0F55611F98845A003707F2 /* IPCGlasses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPCGlasses.m; sourceTree = "<group>"; };
 		CB0F55671F98845A003707F2 /* IPCPayOrderCurrentCustomer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPCPayOrderCurrentCustomer.h; sourceTree = "<group>"; };
 		CB0F55681F98845A003707F2 /* IPCPayOrderCurrentCustomer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPCPayOrderCurrentCustomer.m; sourceTree = "<group>"; };
 		CB0F55691F98845A003707F2 /* IPCCustomerTypeList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPCCustomerTypeList.h; sourceTree = "<group>"; };
@@ -979,8 +976,6 @@
 		CB0F555F1F98845A003707F2 /* Glasses */ = {
 			isa = PBXGroup;
 			children = (
-				CB0F55601F98845A003707F2 /* IPCGlasses.h */,
-				CB0F55611F98845A003707F2 /* IPCGlasses.m */,
 				CB64B5791FE3A9E3009BC565 /* IPCBatchGlassesConfig.h */,
 				CB64B57A1FE3A9E3009BC565 /* IPCBatchGlassesConfig.m */,
 				CB7D833020186AC20033F0DF /* IPCPayOrderGlassesList.h */,
@@ -2055,7 +2050,6 @@
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework",
 				"${BUILT_PRODUCTS_DIR}/JKCategories/JKCategories.framework",
-				"${BUILT_PRODUCTS_DIR}/JSONKit-NoWarning/JSONKit_NoWarning.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/MJExtension/MJExtension.framework",
 				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
@@ -2069,7 +2063,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JKCategories.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSONKit_NoWarning.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJExtension.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
@@ -2180,7 +2173,6 @@
 				CB0F537C1F9876AF003707F2 /* IPCLoginViewController.m in Sources */,
 				CB4EF50A1FCBB46D00BD6250 /* IPCSaleserOptometryInfoView.m in Sources */,
 				CB64D1E91F99A26100FBC5F2 /* IPCError.m in Sources */,
-				CB0F55A91F98845A003707F2 /* IPCGlasses.m in Sources */,
 				CB0F53821F9876AF003707F2 /* IPCPresentModeViewController.m in Sources */,
 				CB0F55A31F98845A003707F2 /* IPCCustomerManager.m in Sources */,
 				CB4B41521FC2A4EF0068E645 /* IPCSaleserInsertCustomerView.m in Sources */,
