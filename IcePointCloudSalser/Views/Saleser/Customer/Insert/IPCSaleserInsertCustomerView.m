@@ -22,13 +22,13 @@
 @property (weak, nonatomic) IBOutlet UITextField *customStyleTextField;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *editHeightConstraint;
-@property (copy, nonatomic) void(^UpdateBlock)(NSString *);
+@property (copy, nonatomic) void(^UpdateBlock)(IPCCustomerMode * customer);
 
 @end
 
 @implementation IPCSaleserInsertCustomerView
 
-- (instancetype)initWithFrame:(CGRect)frame UpdateBlock:(void (^)(NSString *))update
+- (instancetype)initWithFrame:(CGRect)frame UpdateBlock:(void (^)(IPCCustomerMode * customer))update
 {
     self = [super initWithFrame:frame];
     if (self) {

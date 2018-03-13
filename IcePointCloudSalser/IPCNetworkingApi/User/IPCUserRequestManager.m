@@ -50,5 +50,33 @@
     [self postRequest:nil RequestMethod:UserRequest_EmployeeAccount CacheEnable:IPCRequestCacheEnable SuccessBlock:success FailureBlock:failure];
 }
 
++ (void)queryAllStoreWithSuccessBlock:(void (^)(id responseValue))success
+                         FailureBlock:(void (^)(NSError * error))failure
+{
+    [self postRequest:@{@"isRepository":@"false", @"companyId": [IPCAppManager sharedManager].storeResult.companyId } RequestMethod:UserRequest_WareHouseList CacheEnable:IPCRequestCacheDisEnable SuccessBlock:success FailureBlock:failure];
+}
+
++ (void)verifyActivationCode:(NSString *)code SuccessBlock:(void (^)(id))success FailureBlock:(void (^)(NSError *))failure
+{
+    [self postRequest:@{@"verificationCode":code, @"padUUID": [[UIDevice currentDevice] identifierForVendor].UUIDString} RequestMethod:UserRequest_VerifyActivationCode CacheEnable:IPCRequestCacheDisEnable SuccessBlock:success FailureBlock:failure];
+}
+
++ (void)getAppMessageWithSuccessBlock:(void (^)(id responseValue))success
+                         FailureBlock:(void (^)(NSError * error))failure
+{
+    [self postRequest:nil RequestMethod:UserRequest_GetAppMessage CacheEnable:IPCRequestCacheDisEnable SuccessBlock:success FailureBlock:failure];
+}
+
+
++ (void)deletePadUUIDWithUUID:(NSString *)uuid SuccessBlock:(void (^)(id))success FailureBlock:(void (^)(NSError *))failure
+{
+    [self postRequest:uuid RequestMethod:UserRequest_DeleteUUID CacheEnable:IPCRequestCacheDisEnable SuccessBlock:success FailureBlock:failure];
+}
+
++ (void)getOpenPadConfigWithSuccessBlock:(void (^)(id))success FailureBlock:(void (^)(NSError *))failure
+{
+    [self postRequest:nil RequestMethod:UserRequest_OpenPadConfig CacheEnable:IPCRequestCacheDisEnable SuccessBlock:success FailureBlock:failure];
+}
+
 
 @end

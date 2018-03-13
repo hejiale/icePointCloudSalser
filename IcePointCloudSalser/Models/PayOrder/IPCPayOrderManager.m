@@ -152,12 +152,67 @@
     }
 }
 
+
+- (BOOL)extraDiscount
+{
+    double payDiscount = 0;
+    BOOL   isExtraDiscount = NO;
+    
+    if ([IPCPayOrderManager sharedManager].customDiscount > -1) {
+        payDiscount = (double)[IPCPayOrderManager sharedManager].customDiscount/100;
+    }else{
+        payDiscount = (double)[IPCPayOrderManager sharedManager].discount/100;
+    }
+    double employeeDiscount = (double)[IPCPayOrderManager sharedManager].employee.discount/100;
+    double customerDiscount = (double)[[IPCShoppingCart sharedCart] customDiscount]/100;
+    
+    if (payDiscount < MIN(employeeDiscount > 0 ? employeeDiscount : 1, customerDiscount > 0 ? customerDiscount : 1) && [IPCAppManager sharedManager].companyCofig.autoAuditedSalesOrder)
+    {
+        isExtraDiscount = YES;
+    }
+    return isExtraDiscount;
+}
+
+- (NSString *)customerId
+{
+    if ([IPCPayOrderManager sharedManager].currentCustomerId) {
+        return [IPCPayOrderCurrentCustomer sharedManager].currentCustomer.customerID;
+    }else if ([IPCPayOrderManager sharedManager].currentMemberCustomerId){
+        return [IPCPayOrderCurrentCustomer sharedManager].currentMemberCustomer.customerID;
+    }
+    return nil;
+}
+
+- (IPCCustomerMode *)currentCustomer
+{
+    IPCCustomerMode * customer = nil;
+    
+    if ([IPCPayOrderManager sharedManager].currentCustomerId) {
+        customer = [IPCPayOrderCurrentCustomer sharedManager].currentCustomer;
+    }else if ([IPCPayOrderManager sharedManager].currentMemberCustomerId){
+        customer = [IPCPayOrderCurrentCustomer sharedManager].currentMemberCustomer;
+    }
+    return customer;
+}
+
+- (IPCCustomerMode *)currentMemberCard
+{
+    IPCCustomerMode * customer = nil;
+    
+    if ([IPCPayOrderManager sharedManager].currentCustomerId) {
+        customer = [IPCPayOrderCurrentCustomer sharedManager].currentCustomer;
+    }else if ([IPCPayOrderManager sharedManager].currentMemberCustomerId){
+        customer = [IPCPayOrderCurrentCustomer sharedManager].currentMember;
+    }
+    return customer;
+}
+
 - (void)resetData
 {
     [IPCPayOrderManager sharedManager].remark = nil;
     [[IPCPayOrderManager sharedManager] clearPayRecord];
     [IPCPayOrderManager sharedManager].currentCustomerId = nil;
-    [IPCPayOrderManager sharedManager].currentOptometryId = nil;
+//    [IPCPayOrderManager sharedManager].currentOptometryId = nil;
     [IPCPayOrderManager sharedManager].payAmount = 0;
     [IPCPayOrderManager sharedManager].discount = 0;
     [IPCPayOrderManager sharedManager].discountAmount = 0;
@@ -190,7 +245,7 @@
     }];
     
     [IPCPayOrderManager sharedManager].currentCustomerId = orderInfo.orderInfo.customerId;
-    [IPCPayOrderManager sharedManager].currentOptometryId = orderInfo.orderInfo.optometryId;
+//    [IPCPayOrderManager sharedManager].currentOptometryId = orderInfo.orderInfo.optometryId;
     [IPCPayOrderManager sharedManager].employee = orderInfo.employee;
 }
 

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="IPCSaleserMemberAlertView"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view hidden="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Sku-m9-xWL">
+            <rect key="frame" x="0.0" y="0.0" width="408" height="270"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jgo-gA-5sm">
+                    <rect key="frame" x="159.5" y="72.5" width="90" height="125"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="90" id="Fcq-EH-kgF"/>
+                        <constraint firstAttribute="height" constant="125" id="v9N-vT-B4S"/>
+                    </constraints>
+                </button>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_alert_selectCustomer" translatesAutoresizingMaskIntoConstraints="NO" id="ByP-1t-0Bp">
+                    <rect key="frame" x="154" y="85" width="100" height="100"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="fJM-hp-XkV"/>
+                        <constraint firstAttribute="height" constant="100" id="zrI-sU-khR"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请选择会员" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jzy-gZ-wOi">
+                    <rect key="frame" x="129" y="197.5" width="150" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="Hxe-H3-jju"/>
+                        <constraint firstAttribute="width" constant="150" id="IQk-9u-0r7"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                    <color key="textColor" red="0.38823529410000002" green="0.62745098040000002" blue="0.83137254900000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="Jzy-gZ-wOi" firstAttribute="centerX" secondItem="Sku-m9-xWL" secondAttribute="centerX" id="5ER-2N-hdh"/>
+                <constraint firstItem="ByP-1t-0Bp" firstAttribute="centerY" secondItem="Sku-m9-xWL" secondAttribute="centerY" id="Dxz-g8-ZfX"/>
+                <constraint firstItem="Jzy-gZ-wOi" firstAttribute="top" secondItem="Jgo-gA-5sm" secondAttribute="bottom" id="Jl0-zb-B28"/>
+                <constraint firstItem="Jgo-gA-5sm" firstAttribute="centerX" secondItem="Sku-m9-xWL" secondAttribute="centerX" id="KnV-Wn-NvB"/>
+                <constraint firstItem="Jgo-gA-5sm" firstAttribute="centerY" secondItem="Sku-m9-xWL" secondAttribute="centerY" id="ems-9q-sjr"/>
+                <constraint firstItem="ByP-1t-0Bp" firstAttribute="centerX" secondItem="Sku-m9-xWL" secondAttribute="centerX" id="mUU-ky-9hz"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="1003" y="48"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="icon_alert_selectCustomer" width="91" height="125"/>
+    </resources>
+</document>

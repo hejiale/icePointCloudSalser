@@ -80,4 +80,15 @@
     [self postRequest:parameter RequestMethod:PayOrderRequest_GoodsList CacheEnable:IPCRequestCacheDisEnable SuccessBlock:success FailureBlock:failure];
 }
 
++ (void)getAuthWithSuccessBlock:(void (^)(id))success FailureBlock:(void (^)(NSError *))failure
+{
+    [self postRequest:nil RequestMethod:PayOrderRequest_GetAuths CacheEnable:IPCRequestCacheDisEnable SuccessBlock:success FailureBlock:failure];
+}
+
++ (void)getIntegralCanIntroduceStatusWithSuccessBlock:(void (^)(id responseValue))success
+                                         FailureBlock:(void (^)(NSError *error))failure
+{
+    [self postRequest:nil RequestMethod:PayOrderRequest_IntegralCanIntroduce CacheEnable:IPCRequestCacheDisEnable SuccessBlock:success FailureBlock:failure];
+}
+
 @end

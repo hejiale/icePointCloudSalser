@@ -22,13 +22,13 @@
 @property (weak, nonatomic) IBOutlet UIView *membePhoneView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *contentHeight;
 @property (strong, nonatomic) IPCDetailCustomer * detailCustomer;
-@property (copy, nonatomic) void(^UpdateBlock)(NSString *);
+@property (copy, nonatomic) void(^UpdateBlock)(IPCCustomerMode*);
 
 @end
 
 @implementation IPCSaleserUpdateCustomerView
 
-- (instancetype)initWithFrame:(CGRect)frame UpdateBlock:(void (^)(NSString *customerId))update
+- (instancetype)initWithFrame:(CGRect)frame DetailCustomer:(IPCCustomerMode*)customer UpdateBlock:(void (^)(IPCCustomerMode * customer))update
 {
     self = [super initWithFrame:frame];
     if (self)

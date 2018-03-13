@@ -66,4 +66,56 @@
 + (void)queryEmployeeAccountWithSuccessBlock:(void (^)(id responseValue))success
                                 FailureBlock:(void (^)(NSError * error))failure;
 
+/**
+ Query Store
+ 
+ @param success
+ @param failure
+ */
++ (void)queryAllStoreWithSuccessBlock:(void (^)(id responseValue))success
+                         FailureBlock:(void (^)(NSError * error))failure;
+
+/**
+ Verify the activation code
+ 
+ @param code
+ @param success
+ @param failure
+ */
++ (void)verifyActivationCode:(NSString *)code
+                SuccessBlock:(void (^)(id responseValue))success
+                FailureBlock:(void (^)(NSError * error))failure;
+
+
+/**
+ Get App Message
+ 
+ @param success
+ @param failure
+ */
++ (void)getAppMessageWithSuccessBlock:(void (^)(id responseValue))success
+                         FailureBlock:(void (^)(NSError * error))failure;
+
+
+/**
+ Delete UUID
+ 
+ @param uuid
+ @param success
+ @param failure
+ */
++ (void)deletePadUUIDWithUUID:(NSString *)uuid
+                 SuccessBlock:(void (^)(id responseValue))success
+                 FailureBlock:(void (^)(NSError * error))failure;
+
+
+/**
+ Query OpenPad Config
+ 
+ @param success
+ @param failure
+ */
++ (void)getOpenPadConfigWithSuccessBlock:(void (^)(id responseValue))success
+                            FailureBlock:(void (^)(NSError * error))failure;
+
 @end

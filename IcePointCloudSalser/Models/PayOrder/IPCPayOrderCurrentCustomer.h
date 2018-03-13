@@ -12,10 +12,12 @@
 
 + (IPCPayOrderCurrentCustomer *)sharedManager;
 
-@property (nonatomic, strong, readwrite) IPCDetailCustomer              * currentCustomer;
+@property (nonatomic, strong, readwrite) IPCCustomerMode              * currentCustomer;
 @property (nonatomic, strong, readwrite) IPCOptometryMode             * currentOpometry;
+@property (nonatomic, strong, readwrite) IPCCustomerMode              *  currentMember;//选中的会员卡
+@property (nonatomic, strong, readwrite) IPCCustomerMode              *  currentMemberCustomer;//选中的会员卡所选择的客户
 
-- (void)loadCurrentCustomer:(id)responseValue;
+//- (void)loadCurrentCustomer:(id)responseValue;
 
 - (void)clearData;
 

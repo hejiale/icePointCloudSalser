@@ -311,17 +311,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:IPCShoppingCartCountKey object:nil];
 }
 
-- (double)customDiscount
-{
-    if ([IPCPayOrderManager sharedManager].currentCustomerId) {
-        if ([IPCPayOrderCurrentCustomer sharedManager].currentCustomer.discount) {
-            return  [IPCPayOrderCurrentCustomer sharedManager].currentCustomer.discount*10;
-        }
-    }
-    return 100;
-}
-
-
 /**
  *  For batch parameters of similar goods
  */
@@ -357,6 +346,22 @@
             obj.unitPrice = [IPCCommon floorNumber:obj.totalUpdatePrice/obj.glassCount];
         }
     }];
+}
+
+- (double)customDiscount
+{
+    if ([IPCPayOrderManager sharedManager].currentCustomerId) {
+        if (([IPCAppManager sharedManager].companyCofig.isCheckMember && [IPCPayOrderCurrentCustomer sharedManager].currentCustomer.memberLevel) || [IPCPayOrderManager sharedManager].isValiateMember)
+        {
+            return  [[IPCPayOrderCurrentCustomer sharedManager].currentCustomer useDiscount];
+        }
+    }else if ([IPCPayOrderManager sharedManager].currentMemberCustomerId){
+        if (([IPCAppManager sharedManager].companyCofig.isCheckMember && [IPCPayOrderCurrentCustomer sharedManager].currentMember) || [IPCPayOrderManager sharedManager].isValiateMember)
+        {
+            return  [[IPCPayOrderCurrentCustomer sharedManager].currentMember useDiscount];
+        }
+    }
+    return 100;
 }
 
 @end

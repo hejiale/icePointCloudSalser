@@ -146,7 +146,7 @@ static NSString * const optometryIdentifier = @"IPCMenuOptometryTableViewCellIde
         if (!cell) {
             cell = [[UINib nibWithNibName:@"IPCMenuOptometryTableViewCell" bundle:nil]instantiateWithOwner:nil options:nil][0];
         }
-        if ([IPCPayOrderManager sharedManager].currentOptometryId) {
+        if ([IPCPayOrderCurrentCustomer sharedManager].currentOpometry) {
             cell.optometry = [IPCPayOrderCurrentCustomer sharedManager].currentOpometry;
         }else{
             [cell.infoView setHidden:YES];
@@ -160,7 +160,7 @@ static NSString * const optometryIdentifier = @"IPCMenuOptometryTableViewCellIde
 {
     if (indexPath.row == 1 && [IPCPayOrderManager sharedManager].currentCustomerId) {
         return 200;
-    }else if (indexPath.row == 2 && [IPCPayOrderManager sharedManager].currentOptometryId){
+    }else if (indexPath.row == 2 && [IPCPayOrderCurrentCustomer sharedManager].currentOpometry){
         return 150;
     }
     return 75;

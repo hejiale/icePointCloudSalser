@@ -38,7 +38,6 @@
         __weak typeof(self) weakSelf = self;
         [self jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
             __strong typeof(weakSelf) strongSelf = weakSelf;
-            [IPCPayOrderManager sharedManager].currentOptometryId = _optometry.optometryID;
             [IPCPayOrderCurrentCustomer sharedManager].currentOpometry = _optometry;
             
             if (strongSelf.ChangeBlock) {
@@ -63,7 +62,7 @@
 
 - (void)updateStatus
 {
-    if (![_optometry.optometryID isEqualToString:[IPCPayOrderManager sharedManager].currentOptometryId]) {
+    if (![_optometry.optometryID isEqualToString:[IPCPayOrderCurrentCustomer sharedManager].currentOpometry.optometryID]) {
         [self addBorder:5 Width:1 Color: DefaultColor];
         [self.memoLabel setTextColor:DefaultColor];
         [self.createDateLabl setTextColor:DefaultColor];

@@ -31,16 +31,16 @@
     [formDic setObject:[IPCPayOrderManager sharedManager].currentCustomerId forKey:@"customerId"];
     [formDic setObject:[IPCAppManager sharedManager].currentWareHouse.wareHouseId forKey:@"repository"];
     [formDic setObject:employeeList forKey:@"employeeAchievements"];
-    if ([IPCPayOrderManager sharedManager].currentOptometryId) {
-        [formDic setObject:[IPCPayOrderManager sharedManager].currentOptometryId forKey:@"optometryId"];
-    }
+//    if ([IPCPayOrderManager sharedManager].currentOptometryId) {
+//        [formDic setObject:[IPCPayOrderManager sharedManager].currentOptometryId forKey:@"optometryId"];
+//    }
     [formDic setObject:[IPCPayOrderManager sharedManager].currentCustomerId forKey:@"memberCutomerId"];
     [formDic setObject:[IPCPayOrderManager sharedManager].remark ? : @"" forKey:@"orderRemark"];
     [formDic setObject:[NSString stringWithFormat:@"%f",[[IPCShoppingCart sharedCart] allGlassesTotalPrePrice]] forKey:@"suggestPriceTotal"];
     [formDic setObject:[NSString stringWithFormat:@"%f",[IPCPayOrderManager sharedManager].payAmount] forKey:@"orderFinalPrice"];
     [formDic setObject:[NSString stringWithFormat:@"%f",[IPCPayOrderManager sharedManager].discountAmount] forKey:@"donationAmount"];
     [formDic setObject:[IPCPayOrderManager sharedManager].isValiateMember ? @"true" : @"false" forKey:@"isCheckMember"];
-    [formDic setObject:[IPCPayOrderManager sharedManager].isExtraDiscount ? @"true" : @"false" forKey:@"isExcessDiscount"];
+//    [formDic setObject:[IPCPayOrderManager sharedManager].isExtraDiscount ? @"true" : @"false" forKey:@"isExcessDiscount"];
     [formDic setObject:[self productListParamter] forKey:@"detailList"];
     
     [parameters setObject:formDic forKey:@"form"];

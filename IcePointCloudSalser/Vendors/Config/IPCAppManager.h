@@ -12,6 +12,7 @@
 #import "IPCPriceStrategyResult.h"
 #import "IPCCustomTextField.h"
 #import "IPCCompanyConfig.h"
+#import "IPCAuthList.h"
 
 //The App for the first time login
 extern NSString *const IPCFirstLanuchKey;
@@ -38,6 +39,7 @@ extern NSString * const IPCGetProtyOrderNotification;
 @property (nonatomic, strong, readwrite)    IPCPriceStrategyResult * priceStrategy;
 @property (nonatomic, strong, readwrite)    IPCPriceStrategy        * currentStrategy;
 @property (nonatomic, strong, readwrite)    IPCCompanyConfig   * companyCofig;
+@property (nonatomic, strong, readwrite)    IPCAuthList               * authList;
 @property (nonatomic, copy, readwrite)       UIViewController      * currentLevelViewController;
 
 + (IPCAppManager *)sharedManager;
@@ -98,6 +100,13 @@ extern NSString * const IPCGetProtyOrderNotification;
    Load Company Config
  */
 - (void)getCompanyConfig:(void (^)(NSError *error))complete;
+
+/**
+ Get Auth
+ 
+ @param complete
+ */
+- (void)getAuths:(void(^)(NSError *))complete;
 
 
 @end

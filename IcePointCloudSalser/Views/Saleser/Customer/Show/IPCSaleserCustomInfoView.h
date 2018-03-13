@@ -10,6 +10,6 @@
 
 @interface IPCSaleserCustomInfoView : UIView
 
-- (void)updateCustomerInfo;
+- (void)updateCustomerInfo:(IPCCustomerMode *)customer;
 
 @end

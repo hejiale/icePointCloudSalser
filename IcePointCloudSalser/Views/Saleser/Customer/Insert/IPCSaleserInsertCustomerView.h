@@ -10,6 +10,6 @@
 
 @interface IPCSaleserInsertCustomerView : UIView
 
-- (instancetype)initWithFrame:(CGRect)frame UpdateBlock:(void (^)(NSString *))update;
+- (instancetype)initWithFrame:(CGRect)frame UpdateBlock:(void (^)(IPCCustomerMode * customer))update;
 
 @end

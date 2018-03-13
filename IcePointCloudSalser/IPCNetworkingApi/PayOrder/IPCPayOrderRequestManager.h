@@ -88,4 +88,17 @@
                    SuccessBlock:(void (^)(id responseValue))success
                    FailureBlock:(void (^)(NSError *))failure;
 
+/**
+ Get Auth
+ 
+ @param success
+ @param failure
+ */
++ (void)getAuthWithSuccessBlock:(void (^)(id responseValue))success
+                   FailureBlock:(void (^)(NSError *error))failure;
+
+
++ (void)getIntegralCanIntroduceStatusWithSuccessBlock:(void (^)(id responseValue))success
+                                         FailureBlock:(void (^)(NSError *error))failure;
+
 @end

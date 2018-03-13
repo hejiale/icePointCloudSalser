@@ -10,7 +10,7 @@
 
 @interface IPCSaleserUpdateCustomerView : UIView
 
-- (instancetype)initWithFrame:(CGRect)frame UpdateBlock:(void (^)(NSString *customerId))update;
+- (instancetype)initWithFrame:(CGRect)frame DetailCustomer:(IPCCustomerMode*)customer UpdateBlock:(void (^)(IPCCustomerMode * customer))update;
 
 - (void)updateCustomerInfo;
 

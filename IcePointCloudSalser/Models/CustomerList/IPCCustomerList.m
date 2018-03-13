@@ -44,4 +44,16 @@
     return @{@"customerID": @"id", @"memberLevel": @"memberLevel.memberLevel"};
 }
 
+- (double)useDiscount
+{
+    if (self.discount) {
+        if (self.discount > 0) {
+            return self.discount*10;
+        }else{
+            return 100;
+        }
+    }
+    return 100;
+}
+
 @end

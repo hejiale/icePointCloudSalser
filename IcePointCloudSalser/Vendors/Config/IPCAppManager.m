@@ -202,6 +202,25 @@ NSString * const kIPCNotConnectInternetMessage         = @"连接服务出错了
      }];
 }
 
+- (void)getAuths:(void(^)(NSError *))complete
+{
+    __weak typeof(self) weakSelf = self;
+    [IPCPayOrderRequestManager getAuthWithSuccessBlock:^(id responseValue)
+     {
+         __strong typeof(weakSelf) strongSelf = weakSelf;
+         strongSelf.authList = [IPCAuthList mj_objectWithKeyValues:responseValue];
+         
+         if (complete) {
+             complete(nil);
+         }
+     } FailureBlock:^(NSError *error) {
+         if (complete) {
+             complete(error);
+         }
+     }];
+}
+
+
 - (void)loadCurrentWareHouse
 {
     if (self.storeResult.wareHouseId) {

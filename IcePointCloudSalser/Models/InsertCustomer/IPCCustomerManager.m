@@ -49,6 +49,16 @@
     return memberLevelNameArray;
 }
 
+- (NSArray *)storeNameArray{
+    NSMutableArray * storeNameArray = [[NSMutableArray alloc]init];
+    
+    [self.storeList.storeArray enumerateObjectsUsingBlock:^(IPCStore * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [storeNameArray addObject:obj.storeName];
+    }];
+    [storeNameArray insertObject:@"无门店" atIndex:0];
+    return storeNameArray;
+}
+
 - (NSString *)employeeId:(NSString *)employee{
     __block NSString * employeeId = @"";
     [[IPCCustomerManager sharedManager].employeList.employeArray enumerateObjectsUsingBlock:^(IPCEmployee * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -79,6 +89,16 @@
     return memberLevelId;
 }
 
+
+- (NSString *)storeId:(NSString *)storeName{
+    __block NSString * storeId = @"";
+    [[IPCCustomerManager sharedManager].storeList.storeArray enumerateObjectsUsingBlock:^(IPCStore * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj.storeName isEqualToString:storeName]) {
+            storeId = obj.storeId;
+        }
+    }];
+    return storeId;
+}
 
 #pragma mark //Request Data
 - (void)queryEmployee
@@ -117,6 +137,18 @@
             [IPCCommonUI showError:@"查询客户类型信息失败 ！"];
         }
     }];
+}
+
+- (void)queryStore
+{
+    [IPCUserRequestManager queryAllStoreWithSuccessBlock:^(id responseValue)
+     {
+         self.storeList = [[IPCStoreList alloc]initWithResponseObject:responseValue];
+     } FailureBlock:^(NSError *error) {
+         if ([error code] != NSURLErrorCancelled) {
+             [IPCCommonUI showError:error.domain];
+         }
+     }];
 }
 
 @end

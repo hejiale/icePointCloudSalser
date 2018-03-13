@@ -45,7 +45,7 @@
 
 - (void)updateUI
 {
-    if ([IPCPayOrderManager sharedManager].currentOptometryId) {
+    if ([IPCPayOrderCurrentCustomer sharedManager].currentOpometry) {
         [self.optometryHeadView setHidden:NO];
         [self.optometryInfoView setHidden:NO];
         [self.alertImageView setHidden:YES];
@@ -63,7 +63,7 @@
 {
     __weak typeof(self) weakSelf = self;
     [IPCCustomerRequestManager setDefaultOptometryWithCustomID:[IPCPayOrderManager sharedManager].currentCustomerId
-                                            DefaultOptometryID:[IPCPayOrderManager sharedManager].currentOptometryId
+                                            DefaultOptometryID:[IPCPayOrderCurrentCustomer sharedManager].currentOpometry.optometryID
                                                   SuccessBlock:^(id responseValue) {
                                                       [IPCCommonUI showSuccess:@"设置默认验光单成功!"];
                                                       __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -101,7 +101,6 @@
                                                                     CustomerId:[IPCPayOrderManager sharedManager].currentCustomerId
                                                                  CompleteBlock:^(IPCOptometryMode *optometry)
         {
-            [IPCPayOrderManager sharedManager].currentOptometryId = optometry.optometryID;
             [IPCPayOrderCurrentCustomer sharedManager].currentOpometry = optometry;
             
             [weakSelf updateUI];

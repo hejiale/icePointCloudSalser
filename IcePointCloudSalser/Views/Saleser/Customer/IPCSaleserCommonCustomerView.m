@@ -7,31 +7,47 @@
 //
 
 #import "IPCSaleserCommonCustomerView.h"
+#import "IPCSaleserCommonCustomerContentView.h"
+#import "IPCSaleserCommonMemberContentView.h"
 #import "IPCScanCodeViewController.h"
 #import "IPCSaleserCustomInfoView.h"
 #import "IPCSaleserUpdateCustomerView.h"
-#import "IPCSaleserCustomerCollectionViewCell.h"
-#import "IPCCustomerListViewModel.h"
+#import "IPCSaleserCustomerListView.h"
 #import "IPCSaleserInsertCustomerView.h"
 #import "IPCUpgradeMemberView.h"
+#import "IPCSaleserMemberInfoView.h"
+#import "IPCSaleserUpdateCustomerView.h"
+#import "IPCSaleserMemberNoneCustomerView.h"
+#import "IPCSaleserMemberAlertView.h"
+#import "IPCSaleserCustomerAlertView.h"
+#import "IPCSaleserMemberChooseCustomerView.h"
+#import "IPCSaleserMemberCustomerListView.h"
+#import "IPCCustomerListViewModel.h"
 
-static NSString * const customerIdentifier = @"IPCPayOrderCustomerCollectionViewCellIdentifier";
+@interface IPCSaleserCommonCustomerView()
+{
+    BOOL isSelectMemberStatus;
+}
+@property (strong, nonatomic)  UIView *customInfoContentView;
+@property (strong, nonatomic)  UIView *memberCardContentView;
+@property (strong, nonatomic)  UIView *rightContentView;
 
-@interface IPCSaleserCommonCustomerView()<UICollectionViewDelegate,UICollectionViewDataSource,UITextFieldDelegate>
-
-@property (weak, nonatomic) IBOutlet UICollectionView *customerListCollectionView;
-@property (weak, nonatomic) IBOutlet UIView *customInfoContentView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomConstraint;
-@property (weak, nonatomic) IBOutlet UIButton *scanButton;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *insertWidthConstraint;
-@property (nonatomic, strong) IPCRefreshAnimationHeader   *refreshHeader;
-@property (nonatomic, strong) IPCRefreshAnimationFooter    *refreshFooter;
-@property (nonatomic, strong) IPCCustomerListViewModel    * viewModel;
+@property (strong, nonatomic) IPCSaleserCommonCustomerContentView * customerContentView;
+@property (strong, nonatomic) IPCSaleserCommonMemberContentView * memberContentView;
 @property (nonatomic, strong) IPCSaleserCustomInfoView * infoView;
-@property (nonatomic, strong) IPCSaleserUpdateCustomerView * updateView;
 @property (nonatomic, strong) IPCSaleserInsertCustomerView * editCustomerView;
 @property (nonatomic, strong) IPCUpgradeMemberView *  upgradeMemberView;
-@property (nonatomic, strong) IPCPortraitNavigationViewController * cameraNav;
+@property (nonatomic, strong) IPCSaleserMemberInfoView * memberInfoView;
+@property (nonatomic, strong) IPCSaleserCustomerAlertView*customerAlertView;
+@property (nonatomic, strong) IPCSaleserMemberAlertView *memberAlertView;
+@property (nonatomic, strong) IPCUpgradeMemberView* customerUpgradeMemberView;
+@property (nonatomic, strong) IPCSaleserMemberNoneCustomerView * memberNoneCustomerView;
+@property (nonatomic, strong) IPCSaleserUpdateCustomerView * updateCustomerView;
+@property (nonatomic, strong) IPCSaleserCustomerListView * customerListView;
+@property (nonatomic, strong) IPCSaleserMemberChooseCustomerView* chooseCustomerView;
+@property (nonatomic, strong) IPCSaleserMemberCustomerListView * memberCustomerListView;
+
+@property (nonatomic, strong) IPCCustomerListViewModel    * viewModel;
 
 @end
 
@@ -44,314 +60,403 @@ static NSString * const customerIdentifier = @"IPCPayOrderCustomerCollectionView
         UIView * view = [UIView jk_loadInstanceFromNibWithName:@"IPCSaleserCommonCustomerView" owner:self];
         [view setFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
         [self addSubview:view];
+        
+        //Init Data
+        self.viewModel = [[IPCCustomerListViewModel alloc]init];
+        ///获取客户类别和门店
+        [[IPCCustomerManager sharedManager] queryCustomerType];
+        [[IPCCustomerManager sharedManager] queryStore];
     }
     return self;
 }
 
-- (void)layoutSubviews{
+- (void)layoutSubviews
+{
     [super layoutSubviews];
     
-    [self loadCollectionView];
-    //Init Data
-    self.viewModel = [[IPCCustomerListViewModel alloc]init];
-    //Load Data
-    [self loadData];
-    if ([IPCPayOrderManager sharedManager].currentCustomerId) {
-        [self queryCustomerDetail];
-    }
-    //KVO
-    [[IPCPayOrderManager sharedManager] ipc_addObserver:self ForKeyPath:@"currentCustomerId"];
-    
-    if ([IPCAppManager sharedManager].companyCofig.isCheckMember) {
-        [self.scanButton setHidden:YES];
-        self.insertWidthConstraint.constant = 418;
-    }
+    //Load UI
+    [self loadCustomerInfoView:nil];
+    [self.rightContentView addSubview:self.customerListView];
 }
 
 #pragma mark //Set UI
-- (void)loadCollectionView{
-    CGFloat itemWidth = (self.customerListCollectionView.jk_width-5)/2;
-    CGFloat itemHeight = (self.jk_height-30 - 65)/7;
-    
-    UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc]init];
-    layout.itemSize = CGSizeMake(itemWidth, itemHeight);
-    layout.minimumInteritemSpacing = 5;
-    layout.minimumLineSpacing = 5;
-    
-    [_customerListCollectionView setCollectionViewLayout:layout];
-    _customerListCollectionView.emptyAlertImage = @"exception_search";
-    _customerListCollectionView.emptyAlertTitle = @"未查询到客户信息!";
-    _customerListCollectionView.mj_header = self.refreshHeader;
-    _customerListCollectionView.mj_footer = self.refreshFooter;
-    [_customerListCollectionView registerNib:[UINib nibWithNibName:@"IPCSaleserCustomerCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:customerIdentifier];
-}
-
-- (IPCRefreshAnimationHeader *)refreshHeader{
-    if (!_refreshHeader){
-        _refreshHeader = [IPCRefreshAnimationHeader headerWithRefreshingTarget:self refreshingAction:@selector(beginRefresh)];
-    }
-    return _refreshHeader;
-}
-
-- (IPCRefreshAnimationFooter *)refreshFooter{
-    if (!_refreshFooter)
-        _refreshFooter = [IPCRefreshAnimationFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMore)];
-    return _refreshFooter;
-}
-
 - (IPCSaleserCustomInfoView *)infoView
 {
     if (!_infoView) {
-        __weak typeof(self) weakSelf = self;
-        _infoView = [[IPCSaleserCustomInfoView alloc]initWithFrame:CGRectMake(0, 0, self.customInfoContentView.jk_width, self.customInfoContentView.jk_height-60)];
-        [[_infoView rac_signalForSelector:@selector(editCustomerInfoAction:)] subscribeNext:^(RACTuple * _Nullable x) {
-            [weakSelf showUpdateCustomerView];
-        }];
-        [[_infoView rac_signalForSelector:@selector(upgradeMemberAction:)] subscribeNext:^(RACTuple * _Nullable x) {
-            [weakSelf showUpgradeMemberView];
-        }];
+        _infoView = [[IPCSaleserCustomInfoView alloc]initWithFrame:self.customInfoContentView.bounds];
     }
     return _infoView;
 }
 
-- (IPCSaleserInsertCustomerView *)editCustomerView
-{
-    if (!_editCustomerView) {
-        __weak typeof(self) weakSelf = self;
-        _editCustomerView = [[IPCSaleserInsertCustomerView alloc]initWithFrame:[IPCAppManager sharedManager].currentLevelViewController.view.bounds
-                                                                   UpdateBlock:^(NSString *customerId)
-                             {
-                                 [IPCPayOrderManager sharedManager].currentCustomerId = customerId;
-                                 [weakSelf loadData];
-                             }];
+- (IPCSaleserMemberInfoView *)memberInfoView{
+    if (!_memberInfoView) {
+        _memberInfoView = [[IPCSaleserMemberInfoView alloc]initWithFrame:self.memberCardContentView.bounds];
     }
-    return _editCustomerView;
+    return _memberInfoView;
 }
 
-- (IPCSaleserUpdateCustomerView *)updateView
-{
-    if (!_updateView) {
-        __weak typeof(self) weakSelf = self;
-        _updateView = [[IPCSaleserUpdateCustomerView alloc]initWithFrame:[IPCAppManager sharedManager].currentLevelViewController.view.bounds
-                                                             UpdateBlock:^(NSString *customerId) {
-                                                                 [weakSelf queryCustomerDetail];
-                                                             }];
+- (IPCSaleserCustomerAlertView *)customerAlertView{
+    if (!_customerAlertView) {
+        _customerAlertView = [[IPCSaleserCustomerAlertView alloc]initWithFrame:self.customInfoContentView.bounds];
     }
-    return _updateView;
+    return _customerAlertView;
 }
 
-- (IPCUpgradeMemberView *)upgradeMemberView
-{
-    if (!_upgradeMemberView) {
-        _upgradeMemberView = [[IPCUpgradeMemberView alloc]initWithFrame:[IPCAppManager sharedManager].currentLevelViewController.view.bounds Customer:[IPCPayOrderCurrentCustomer sharedManager].currentCustomer UpdateBlock:^{
-            
+- (IPCUpgradeMemberView *)customerUpgradeMemberView{
+    if (!_customerUpgradeMemberView) {
+        __weak typeof(self) weakSelf = self;
+        _customerUpgradeMemberView = [[IPCUpgradeMemberView alloc]initWithFrame:self.memberCardContentView.bounds];
+        [[_customerUpgradeMemberView rac_signalForSelector:@selector(upgradeMemberAction:)] subscribeNext:^(RACTuple * _Nullable x) {
+            [weakSelf showUpgradeMemberView];
         }];
     }
-    return _upgradeMemberView;
+    return _customerUpgradeMemberView;
 }
 
-- (void)loadCustomerInfoView
-{
-    self.bottomConstraint.constant = 50;
-    [self.infoView updateCustomerInfo];
-    [self.customInfoContentView addSubview:self.infoView];
-    [self.customInfoContentView bringSubviewToFront:self.infoView];
-    [self.customerListCollectionView reloadData];
-    [[NSNotificationCenter defaultCenter] postNotificationName:IPCChooseCustomerNotification object:nil];
+- (IPCSaleserMemberAlertView *)memberAlertView{
+    if (!_memberAlertView) {
+        _memberAlertView = [[IPCSaleserMemberAlertView alloc]initWithFrame:self.memberCardContentView.bounds];
+    }
+    return _memberAlertView;
 }
 
-- (void)showEditCustomerView
+- (IPCSaleserMemberNoneCustomerView *)memberNoneCustomerView{
+    if (!_memberNoneCustomerView) {
+        __weak typeof(self) weakSelf = self;
+        _memberNoneCustomerView = [[IPCSaleserMemberNoneCustomerView alloc]initWithFrame:self.customInfoContentView.bounds];
+        [[_memberNoneCustomerView rac_signalForSelector:@selector(bindCustomerAction:)] subscribeNext:^(RACTuple * _Nullable x) {
+            [weakSelf loadMemberChooseCustomerView];
+        }];
+        [[_memberNoneCustomerView rac_signalForSelector:@selector(createCustomerAction:)] subscribeNext:^(RACTuple * _Nullable x) {
+            [weakSelf showEditCustomerView:YES];
+        }];
+        [[_memberNoneCustomerView rac_signalForSelector:@selector(createWithVistorAction:)] subscribeNext:^(RACTuple * _Nullable x) {
+            [weakSelf queryVisitorCustomer];
+        }];
+    }
+    return _memberNoneCustomerView;
+}
+
+- (IPCSaleserCustomerListView *)customerListView{
+    if (!_customerListView) {
+        __weak typeof(self) weakSelf = self;
+        _customerListView = [[IPCSaleserCustomerListView alloc]initWithFrame:self.rightContentView.bounds
+                                                               IsChooseStatus:NO
+                                                                       Detail:^(IPCCustomerMode* customer, BOOL isMemberReload)
+                             {
+                                 if (isMemberReload) {
+                                     [weakSelf loadCustomerMemberInfoView:YES];
+                                     [weakSelf queryMemberBindCustomer];
+                                 }else{
+                                     [weakSelf reloadCustomerInfo];
+                                 }
+                             } SelectType:^(BOOL isSelectMemeber) {
+                                 isSelectMemberStatus = isSelectMemeber;
+                                 if (![IPCPayOrderManager sharedManager].customerId && ![IPCPayOrderManager sharedManager].currentMemberCustomerId) {
+                                     [weakSelf loadCustomerInfoView:nil];
+                                     [weakSelf loadCustomerMemberInfoView:NO];
+                                 }
+                             }];
+        [[_customerListView rac_signalForSelector:@selector(insertCustomerAction:)]subscribeNext:^(RACTuple * _Nullable x) {
+            [weakSelf showEditCustomerView:NO];
+        }];
+    }
+    return _customerListView;
+}
+
+- (IPCSaleserMemberChooseCustomerView *)chooseCustomerView{
+    if (!_chooseCustomerView) {
+        __weak typeof(self) weakSelf = self;
+        _chooseCustomerView = [[IPCSaleserMemberChooseCustomerView alloc]initWithFrame:[UIApplication sharedApplication].keyWindow.bounds BindSuccess:^(IPCCustomerMode *customer)
+                               {
+                                   [IPCPayOrderCurrentCustomer sharedManager].currentMemberCustomer = customer;
+                                   [weakSelf loadCustomerInfoView:customer];
+                               }];
+    }
+    return _chooseCustomerView;
+}
+
+- (IPCSaleserMemberCustomerListView *)memberCustomerListView{
+    if (!_memberCustomerListView) {
+        __weak typeof(self) weakSelf = self;
+        _memberCustomerListView = [[IPCSaleserMemberCustomerListView alloc]initWithFrame:self.customInfoContentView.bounds Select:^(IPCCustomerMode *customer)
+                                   {
+                                       __strong typeof(weakSelf) strongSelf = weakSelf;
+                                       [IPCPayOrderCurrentCustomer sharedManager].currentMemberCustomer = customer;
+                                       [weakSelf loadCustomerInfoView:customer];
+                                   }];
+    }
+    return _memberCustomerListView;
+}
+
+#pragma mark //Load UI
+- (void)loadCustomerInfoView:(IPCCustomerMode *)customer
 {
+    [self clearCustomerInfoView];
+    
+    if (customer) {
+        [self.editButton setHidden:NO];
+        [self.infoView updateCustomerInfo: customer];
+        [self.customInfoContentView addSubview:self.infoView];
+    }else{
+        [self.editButton setHidden:YES];
+        [self.customInfoContentView addSubview:self.customerAlertView];
+        if (![IPCPayOrderManager sharedManager].currentCustomerId && ![IPCPayOrderManager sharedManager].currentMemberCustomerId) {
+            [self.customerAlertView updateUI:isSelectMemberStatus];
+        }
+    }
+    [self resetCustomerData];
+    
+    if (!customer.isVisitor) {
+        [self.viewModel queryCustomerOptometry];
+    }
+}
+
+- (void)loadCustomerMemberInfoView:(BOOL)isChoose
+{
+    [self clearMemberInfoView];
+    
+    if ([IPCPayOrderManager sharedManager].currentCustomerId || [IPCPayOrderManager sharedManager].currentMemberCustomerId)
+    {
+        if (isChoose) {
+            [self.memberInfoView updateMemberCardInfo:[IPCPayOrderCurrentCustomer sharedManager].currentMember];
+            [self.memberCardContentView addSubview:self.memberInfoView];
+        }else{
+            if ([IPCPayOrderCurrentCustomer sharedManager].currentCustomer.memberLevel) {
+                [self.memberInfoView updateMemberCardInfo:[IPCPayOrderCurrentCustomer sharedManager].currentCustomer];
+                [self.memberCardContentView addSubview:self.memberInfoView];
+            }else{
+                [self.memberCardContentView addSubview:self.customerUpgradeMemberView];
+            }
+        }
+        if (([IPCPayOrderCurrentCustomer sharedManager].currentCustomer.memberLevel || [IPCPayOrderCurrentCustomer sharedManager].currentMember) && ![IPCAppManager sharedManager].companyCofig.isCheckMember)
+        {
+            if (![IPCPayOrderManager sharedManager].isValiateMember){
+                if ([IPCAppManager sharedManager].authList.forceVerifyMember) {
+                    [self.unCheckMemberLabel setHidden:NO];
+                    [self.compulsoryVerifityView setHidden:NO];
+                }else{
+                    [self.unCheckMemberLabel setHidden:NO];
+                }
+            }
+        }
+    }else{
+        [self.memberCardContentView addSubview:self.memberAlertView];
+        if (![IPCPayOrderManager sharedManager].currentCustomerId && ![IPCPayOrderManager sharedManager].currentMemberCustomerId) {
+            [self.memberAlertView updateUI:isSelectMemberStatus];
+        }
+    }
+}
+
+- (void)loadMemberChooseCustomerView
+{
+    if (self.chooseCustomerView) {
+        [self.chooseCustomerView removeFromSuperview];
+        self.chooseCustomerView = nil;
+    }
+    [[UIApplication sharedApplication].keyWindow addSubview:self.chooseCustomerView];
+}
+
+- (void)loadMemberCustomerListView:(NSArray<IPCCustomerMode *> *)customerList
+{
+    [self clearCustomerInfoView];
+    [self.editButton setHidden:YES];
+    
+    if (customerList.count) {
+        if (customerList.count > 1) {
+            [self clearCustomerInfoView];
+            [self.memberCustomerListView reloadCustomerListView:customerList];
+            [self.customInfoContentView addSubview:self.memberCustomerListView];
+        }else{
+            IPCCustomerMode * customer = customerList[0];
+            [IPCPayOrderCurrentCustomer sharedManager].currentMemberCustomer = customer;
+            [self loadCustomerInfoView:customer];
+        }
+    }else{
+        [self.customInfoContentView addSubview:self.memberNoneCustomerView];
+    }
+}
+
+#pragma mark //Clear All Views
+- (void)clearCustomerInfoView
+{
+    [self.infoView removeFromSuperview];self.infoView = nil;
+    [self.customerAlertView removeFromSuperview];self.customerAlertView = nil;
+    [self.memberNoneCustomerView removeFromSuperview];self.memberNoneCustomerView = nil;
+    [self.memberCustomerListView removeFromSuperview];self.memberCustomerListView = nil;
+}
+
+- (void)clearMemberInfoView
+{
+    [self.memberInfoView removeFromSuperview];self.memberInfoView = nil;
+    [self.memberAlertView removeFromSuperview];self.memberAlertView = nil;
+    [self.customerUpgradeMemberView removeFromSuperview];self.customerUpgradeMemberView = nil;
+    [self.unCheckMemberLabel setHidden:YES];
+    [self.compulsoryVerifityView setHidden:YES];
+}
+
+#pragma mark //Request Data
+- (void)validationMemberRequest:(NSString *)code
+{
+    __weak typeof(self) weakSelf = self;
+    [self.viewModel validationMemberRequest:code Complete:^(IPCCustomerMode * customer)
+     {
+         if (customer) {
+             __strong typeof(weakSelf) strongSelf = weakSelf;
+             ///切换至会员列表状态
+             isSelectMemberStatus = YES;
+             [strongSelf.customerListView changeToMemberStatus];
+             
+             [IPCPayOrderManager sharedManager].currentCustomerId = nil;
+             [IPCPayOrderCurrentCustomer sharedManager].currentCustomer = nil;
+             [IPCPayOrderCurrentCustomer sharedManager].currentMemberCustomer = nil;
+             [IPCPayOrderCurrentCustomer sharedManager].currentOpometry = nil;
+             
+             [IPCPayOrderCurrentCustomer sharedManager].currentMember = customer;
+             [IPCPayOrderManager sharedManager].currentMemberCustomerId = customer.memberCustomerId;
+             [IPCPayOrderManager sharedManager].customDiscount = [[IPCShoppingCart sharedCart] customDiscount];
+             
+             [weakSelf loadCustomerMemberInfoView:YES];
+             [weakSelf queryMemberBindCustomer];
+         }
+     }];
+}
+
+- (void)queryMemberBindCustomer
+{
+    __weak typeof(self) weakSelf = self;
+    [self.viewModel queryBindMemberCustomer:^(NSArray *customerList, NSError *error) {
+        [weakSelf loadMemberCustomerListView:customerList];
+    }];
+}
+
+- (void)queryVisitorCustomer
+{
+    __weak typeof(self) weakSelf = self;
+    [self.viewModel queryVisitorCustomer:^ {
+        [weakSelf clearCustomerInfoView];
+        [weakSelf loadCustomerInfoView:[IPCPayOrderCurrentCustomer sharedManager].currentMemberCustomer];
+    }];
+}
+
+- (void)bindMember:(IPCCustomerMode *)customer
+{
+    __weak typeof(self) weakSelf = self;
+    [IPCCustomerRequestManager bindMemberWithCustomerId:customer.customerID
+                                       MemberCustomerId:[IPCPayOrderManager sharedManager].currentMemberCustomerId
+                                           SuccessBlock:^(id responseValue)
+     {
+         [IPCPayOrderCurrentCustomer sharedManager].currentMemberCustomer = [IPCCustomerMode mj_objectWithKeyValues:responseValue];
+         [weakSelf clearCustomerInfoView];
+         [weakSelf loadCustomerInfoView:[IPCPayOrderCurrentCustomer sharedManager].currentMemberCustomer];
+     } FailureBlock:^(NSError *error) {
+         [IPCCommonUI showError:error.domain];
+     }];
+}
+
+#pragma mark //Clicked Events
+- (IBAction)validationMemberAction:(id)sender
+{
+    __weak typeof(self) weakSelf = self;
+    IPCScanCodeViewController *scanVc = [[IPCScanCodeViewController alloc] initWithFinish:^(NSString *result, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+//        [strongSelf.cameraNav dismissViewControllerAnimated:YES completion:nil];
+//        [weakSelf validationMemberRequest:result];
+    }];
+//    self.cameraNav = [[IPCPortraitNavigationViewController alloc]initWithRootViewController:scanVc];
+//    [self presentViewController:self.cameraNav  animated:YES completion:nil];
+}
+
+- (void)showEditCustomerView:(BOOL)isBindNewCustomer
+{
+    
+    __weak typeof(self) weakSelf = self;
+    self.editCustomerView = [[IPCSaleserInsertCustomerView alloc]initWithFrame:[IPCAppManager sharedManager].currentLevelViewController.view.bounds
+                                                          UpdateBlock:^(IPCCustomerMode * customer)
+                             {
+                                 __strong typeof(weakSelf) strongSelf = weakSelf;
+                                 if (isSelectMemberStatus) {
+                                     [weakSelf bindMember:customer];
+                                 }else{
+                                     [IPCPayOrderManager sharedManager].currentCustomerId = customer.customerID;
+                                     [IPCPayOrderCurrentCustomer sharedManager].currentCustomer = customer;
+                                     [weakSelf loadCustomerInfoView:customer];
+                                     [weakSelf loadCustomerMemberInfoView:NO];
+                                     [strongSelf.customerListView loadData];
+                                 }
+                             }];
     [[IPCAppManager sharedManager].currentLevelViewController.view addSubview:self.editCustomerView];
     [[IPCAppManager sharedManager].currentLevelViewController.view bringSubviewToFront:self.editCustomerView];
 }
 
-- (void)showUpdateCustomerView
+- (IBAction)updateCustomerAction:(id)sender
 {
-    [[IPCAppManager sharedManager].currentLevelViewController.view addSubview:self.updateView];
-    [[IPCAppManager sharedManager].currentLevelViewController.view bringSubviewToFront:self.updateView];
-    [self.updateView updateCustomerInfo];
+    __weak typeof(self) weakSelf = self;
+    self.updateCustomerView = [[IPCSaleserUpdateCustomerView alloc]initWithFrame:[IPCAppManager sharedManager].currentLevelViewController.view.bounds
+                                                           DetailCustomer:isSelectMemberStatus ? [IPCPayOrderCurrentCustomer sharedManager].currentMemberCustomer : [IPCPayOrderCurrentCustomer sharedManager].currentCustomer
+                                                              UpdateBlock:^(IPCCustomerMode * customer)
+                               {
+                                   __strong typeof(weakSelf) strongSelf = weakSelf;
+                                   if (isSelectMemberStatus) {
+                                       [IPCPayOrderCurrentCustomer sharedManager].currentMemberCustomer = customer;
+                                   }else{
+                                       [IPCPayOrderCurrentCustomer sharedManager].currentCustomer = customer;
+                                   }
+                                   [weakSelf loadCustomerInfoView:customer];
+                                   [strongSelf.customerListView loadData];
+                               }];
+    [[IPCAppManager sharedManager].currentLevelViewController.view addSubview:self.updateCustomerView];
+    [[IPCAppManager sharedManager].currentLevelViewController.view bringSubviewToFront:self.updateCustomerView];
 }
+
 
 - (void)showUpgradeMemberView
 {
+    __weak typeof(self) weakSelf = self;
+    self.upgradeMemberView = [[IPCUpgradeMemberView alloc]initWithFrame:[IPCAppManager sharedManager].currentLevelViewController.view.bounds
+                                                               Customer:[IPCPayOrderCurrentCustomer sharedManager].currentCustomer
+                                                            UpdateBlock:^(IPCCustomerMode *customer)
+                              {
+                                  __strong typeof(weakSelf) strongSelf = weakSelf;
+                                  [IPCPayOrderManager sharedManager].currentCustomerId = customer.customerID;
+                                  [IPCPayOrderCurrentCustomer sharedManager].currentCustomer = customer;
+                                  [weakSelf loadCustomerInfoView:customer];
+                                  [weakSelf loadCustomerMemberInfoView:NO];
+                                  [strongSelf.customerListView loadData];
+                              }];
     [[IPCAppManager sharedManager].currentLevelViewController.view addSubview:self.upgradeMemberView];
     [[IPCAppManager sharedManager].currentLevelViewController.view bringSubviewToFront:self.upgradeMemberView];
 }
 
-#pragma mark //Refresh Methods
-- (void)beginRefresh
-{
-    //Stop Footer Refresh Method
-    if (self.refreshFooter.isRefreshing) {
-        [self.refreshFooter endRefreshing];
-        [[IPCHttpRequest sharedClient] cancelAllRequest];
-    }
-    [self.refreshFooter resetDataStatus];
-    [self.viewModel resetData];
-    [self loadCustomerList];
-}
-
-- (void)loadMore
-{
-    self.viewModel.currentPage++;
-    [self loadCustomerList];
-}
-
-#pragma mark //Load Data
-- (void)loadData
-{
-    [self.viewModel resetData];
-    self.customerListCollectionView.isBeginLoad = YES;
-    [self loadCustomerList];
-    [self.customerListCollectionView reloadData];
-}
-
-#pragma mark //Request Data
-- (void)loadCustomerList
-{
-    __weak typeof(self) weakSelf = self;
-    [self.viewModel queryCustomerList:^(NSError *error){
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf.viewModel.status == IPCFooterRefresh_HasNoMoreData) {
-            [strongSelf.refreshFooter noticeNoDataStatus];
-        }else if (strongSelf.viewModel.status == IPCRefreshError){
-            if ([error code] != NSURLErrorCancelled) {
-                [IPCCommonUI showError:@"查询客户失败,请稍后重试!"];
-            }
-        }
-        [strongSelf reload];
-    }];
-}
-
-- (void)queryCustomerDetail
-{
-    __weak typeof(self) weakSelf = self;
-    [self.viewModel queryCustomerDetail:^{
-        [weakSelf loadCustomerInfoView];
-    }];
-}
-
-- (void)validationMemberRequest:(NSString *)code
-{
-    __weak typeof(self) weakSelf = self;
-    [self.viewModel validationMemberRequest:code Complete:^{
-        [weakSelf reloadCustomerInfo];
-    }];
-}
-
-
-#pragma mark //Reload CollectionView
-- (void)reload
-{
-    self.customerListCollectionView.isBeginLoad = NO;
-    [self.customerListCollectionView reloadData];
-    
-    if (self.viewModel.status == IPCFooterRefresh_HasMoreData) {
-        [self stopRefresh];
-    }
+///强制验证通过
+- (IBAction)compulsoryVerificationAction:(id)sender {
+    [IPCPayOrderManager sharedManager].isValiateMember = YES;
+    [IPCPayOrderManager sharedManager].memberCheckType = @"COMPEL";
+    [IPCPayOrderManager sharedManager].customDiscount = [[IPCShoppingCart sharedCart] customDiscount];
+    [self loadCustomerMemberInfoView:isSelectMemberStatus];
 }
 
 - (void)reloadCustomerInfo
 {
+    [self loadCustomerInfoView:[IPCPayOrderCurrentCustomer sharedManager].currentCustomer];
+    [self loadCustomerMemberInfoView:NO];
+}
+
+- (void)resetCustomerData
+{
     [[IPCPayOrderManager sharedManager] clearPayRecord];
     [[IPCPayOrderManager sharedManager] resetCustomerDiscount];
     [[IPCPayOrderManager sharedManager] calculatePayAmount];
-    
-    [self loadCustomerInfoView];
 }
 
-- (void)stopRefresh{
-    if (self.refreshHeader.isRefreshing) {
-        [self.refreshHeader endRefreshing];
-    }
-    if (self.refreshFooter.isRefreshing) {
-        [self.refreshFooter endRefreshing];
-    }
-}
-
-#pragma mark //Clicked Events
-- (IBAction)insertNewCustomerAction:(id)sender
+- (void)resetCustomerView
 {
-    [self showEditCustomerView];
-}
-
-- (IBAction)scanAction:(id)sender {
-    __weak typeof(self) weakSelf = self;
-    IPCScanCodeViewController *scanVc = [[IPCScanCodeViewController alloc] initWithFinish:^(NSString *result, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        [strongSelf.cameraNav dismissViewControllerAnimated:YES completion:nil];
-        [weakSelf validationMemberRequest:result];
-    }];
-    self.cameraNav = [[IPCPortraitNavigationViewController alloc]initWithRootViewController:scanVc];
-    [[IPCAppManager sharedManager].currentLevelViewController presentViewController:self.cameraNav  animated:YES completion:nil];
-}
-
-#pragma mark //UICollectionViewDataSource
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return self.viewModel.customerArray.count;
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    IPCSaleserCustomerCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:customerIdentifier forIndexPath:indexPath];
-    
-    if (self.viewModel && self.viewModel.customerArray.count) {
-        IPCCustomerMode * customer = self.viewModel.customerArray[indexPath.row];
-        cell.currentCustomer = customer;
-    }
-    return cell;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    //Prereload Data
-    if (self.viewModel.status == IPCFooterRefresh_HasMoreData) {
-        if (!self.refreshFooter.isRefreshing) {
-            if (indexPath.row == self.viewModel.customerArray.count -10) {
-                [self.refreshFooter beginRefreshing];
-            }
-        }
-    }
-}
-
-#pragma mark //UICollectionViewDelegate
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (self.viewModel.customerArray.count) {
-        IPCCustomerMode * customer = self.viewModel.customerArray[indexPath.row];
-        if (customer) {
-            [IPCPayOrderManager sharedManager].currentCustomerId = customer.customerID;
-        }
-    }
-}
-
-#pragma mark //UITextField Delegate
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [textField resignFirstResponder];
-    return YES;
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    self.viewModel.searchWord = [textField.text jk_trimmingWhitespace];
-    [self loadData];
-}
-
-
-#pragma mark //KVO
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
-{
-    if ([keyPath isEqualToString:@"currentCustomerId"]) {
-        if (![IPCPayOrderManager sharedManager].currentCustomerId) {
-            [self.infoView removeFromSuperview];
-            [self.customerListCollectionView reloadData];
-            self.bottomConstraint.constant = 5;
-            [[NSNotificationCenter defaultCenter] postNotificationName:IPCChooseCustomerNotification object:nil];
-        }else{
-            [self queryCustomerDetail];
-        }
-    }
+    isSelectMemberStatus = NO;
+    [self loadCustomerInfoView:nil];
+    [self loadCustomerMemberInfoView:NO];
+    [self.customerListView changeToCustomerStatus];
+    [self.editButton setHidden:YES];
+    [IPCPayOrderManager sharedManager].isValiateMember = NO;
 }
 
 

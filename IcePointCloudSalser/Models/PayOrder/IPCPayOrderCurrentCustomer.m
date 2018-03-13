@@ -20,14 +20,14 @@
     return _client;
 }
 
-- (void)loadCurrentCustomer:(id)responseValue
-{
-    [self clearData];
-    
-    IPCDetailCustomer * detailCustomer = [IPCDetailCustomer mj_objectWithKeyValues:responseValue];
-    self.currentCustomer = detailCustomer;
-    self.currentOpometry = [IPCOptometryMode mj_objectWithKeyValues:detailCustomer.optometrys[0]];
-}
+//- (void)loadCurrentCustomer:(id)responseValue
+//{
+//    [self clearData];
+//    
+//    IPCDetailCustomer * detailCustomer = [IPCDetailCustomer mj_objectWithKeyValues:responseValue];
+//    self.currentCustomer = detailCustomer;
+//    self.currentOpometry = [IPCOptometryMode mj_objectWithKeyValues:detailCustomer.optometrys[0]];
+//}
 
 - (void)clearData{
     self.currentCustomer = nil;

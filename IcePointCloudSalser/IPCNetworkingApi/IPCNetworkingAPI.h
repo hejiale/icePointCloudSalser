@@ -39,6 +39,12 @@
 #define CustomerRequest_ValidateCustomer        @"customerAdmin.validateCustomerQRcode"
 #define CustomerRequest_UpdateMemberPhone   @"customerAdmin.updateCustomerMemberPhone"
 
+///会员体系
+#define CustomerRequest_MemberList                  @"customerAdmin.listCustomerMemberAccount"
+#define CustomerRequest_BindCustomer               @"customerAdmin.customerUpdateToMember"
+#define CustomerRequest_MemberCustomerDetail @"customerAdmin.listCustomerProfilesForCustomerMember"
+#define CustomerRequest_GetVisitorCustomer       @"customerAdmin.getVisitorCustomer"
+
 #define GoodsRequest_PriceStrategy                     @"productAdmin.listPriceStrategyForListProduct"
 
 #define PayOrderRequest_CompanyConfig            @"companyAdmin.getCompanyConfig"
@@ -47,6 +53,8 @@
 #define PayOrderRequest_EmployeeList                 @"employeeadmin.listEmployee"
 #define PayOrderRequest_Integral                          @"integralTradeAdmin.getSaleOrderDetailIntegralList"
 #define PayOrderRequest_IntegralRule                   @"integralTradeAdmin.getIntegralTradeObjectForCompany"
+#define PayOrderRequest_GetAuths                      @"bizadmin.getAuths"
+#define PayOrderRequest_IntegralCanIntroduce     @"integralRewardAdmin.getCompanyIntegralRewardStatus"
 #define PayOrderRequest_GoodsList                      @"productAdmin.searchProductWithPager"
 #define PayOrderRequest_PayOrderWithStatus        @"orderObjectAdmin.updateOrderForStatus"
 
@@ -55,6 +63,10 @@
 #define UserRequest_UpdatePassword                   @"bizadmin.updateUserPassword"
 #define UserRequest_WareHouseList                      @"bizadmin.listStoreOrRepositoryByCompanyId"
 #define UserRequest_EmployeeAccount                  @"employeeadmin.getEmployeeObjectFromAccount"
+#define UserRequest_VerifyActivationCode             @"padMessageAdmin.activateIPAD"
+#define UserRequest_GetAppMessage                    @"padMessageAdmin.listPadMessages"
+#define UserRequest_DeleteUUID                           @"padMessageAdmin.deletePadUUID"
+#define UserRequest_OpenPadConfig                     @"companyAdmin.getIsOpenPadConfig"
 
 
 #endif /* IPCNetworkingAPI_h */
