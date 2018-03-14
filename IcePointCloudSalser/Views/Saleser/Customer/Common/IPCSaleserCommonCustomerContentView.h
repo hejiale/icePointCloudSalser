@@ -10,4 +10,6 @@
 
 @interface IPCSaleserCommonCustomerContentView : UIView
 
+- (void)loadCustomerInfoView:(IPCCustomerMode *)customer;
+
 @end

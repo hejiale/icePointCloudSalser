@@ -10,4 +10,6 @@
 
 @interface IPCSaleserCommonMemberContentView : UIView
 
+- (void)loadCustomerMemberInfoView:(BOOL)isChoose;
+
 @end

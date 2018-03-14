@@ -22,13 +22,15 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
     BOOL  isSelectMember;
     NSString * currentSelectCustomer;//绑定会员时选择客户的临时参数
 }
-@property (weak, nonatomic) IBOutlet UICollectionView *customerCollectionView;
-@property (weak, nonatomic) IBOutlet UIView *searchTypeView;
-@property (weak, nonatomic) IBOutlet UIView *rightButtonView;
-@property (weak, nonatomic) IBOutlet UITextField *searchTextField;
-@property (weak, nonatomic) IBOutlet UIButton *insertButton;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *collectionViewBottom;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rightButtonViewWidth;
+@property (strong, nonatomic)  UICollectionView *customerCollectionView;
+@property (strong, nonatomic)  UIView *searchTypeView;
+@property (strong, nonatomic)  UIView *rightButtonView;
+@property (strong, nonatomic)  UITextField *searchTextField;
+@property (strong, nonatomic)  UIButton *insertButton;
+
+@property (strong, nonatomic)  NSLayoutConstraint *collectionViewBottom;
+@property (strong, nonatomic)  NSLayoutConstraint *rightButtonViewWidth;
+
 @property (nonatomic, strong) IPCRefreshAnimationHeader   *refreshHeader;
 @property (nonatomic, strong) IPCRefreshAnimationFooter    *refreshFooter;
 @property (nonatomic, strong) IPCCustomerListViewModel    * viewModel;
@@ -40,18 +42,13 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
 
 @implementation IPCSaleserCustomerListView
 
-- (instancetype)initWithFrame:(CGRect)frame  IsChooseStatus:(BOOL)isChoose Detail:(void(^)(IPCCustomerMode * customer, BOOL isMemberReload))detail SelectType:(void(^)(BOOL isSelectMemeber))isMember
+- (instancetype)initWithIsChooseStatus:(BOOL)isChoose Detail:(void(^)(IPCCustomerMode * customer, BOOL isMemberReload))detail SelectType:(void(^)(BOOL isSelectMemeber))isMember
 {
-    self = [super initWithFrame:frame];
+    self = [super init];
     if (self) {
-        UIView * view = [UIView jk_loadInstanceFromNibWithName:@"IPCSaleserCustomerListView" owner:self];
-        [view setFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
-        [self addSubview:view];
-        
         chooseStatus = isChoose;
         self.DetailBlock = detail;
         self.IsSelectMemberBlock = isMember;
-        [self.searchTextField setPlaceholder:searchCustomerPlaceHolder];
     }
     return self;
 }
@@ -60,42 +57,63 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
 {
     [super layoutSubviews];
     
+    [self setBackgroundColor:[UIColor clearColor]];
     [self loadCollectionView];
-    if (!chooseStatus) {
-        [self reloadCollectionViewUI];
-        [self.rightButtonView addSubview:self.typeButton];
-    }else{
-        self.rightButtonViewWidth.constant = 0;
-    }
+    
+//    if (!chooseStatus) {
+//        [self reloadCollectionViewUI];
+//        [self.rightButtonView addSubview:self.typeButton];
+//    }else{
+//        self.rightButtonViewWidth.constant = 0;
+//    }
     self.viewModel = [[IPCCustomerListViewModel alloc]init];
     [self loadData];
 }
 
 #pragma mark //Set UI
-- (void)loadCollectionView{
-    CGFloat itemWidth = 0;
-    CGFloat itemHeight = 0;
-    
-    if (chooseStatus) {
-        itemWidth = (self.jk_width-10)/2;
-        itemHeight = (self.jk_height-40-60)/5;
-    }else{
-        itemWidth = (self.jk_width-20)/3;
-        itemHeight = (self.jk_height-60-60)/7;
+- (UICollectionView *)customerCollectionView{
+    if (!_customerCollectionView) {
+        CGFloat itemWidth = 0;
+        CGFloat itemHeight = 0;
+        
+        if (chooseStatus) {
+            itemWidth = (self.jk_width-10)/2;
+            itemHeight = (self.jk_height-40-60)/5;
+        }else{
+            itemWidth = (self.jk_width-10)/3;
+            itemHeight = (self.jk_height-30-60)/7;
+        }
+        
+        UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc]init];
+        layout.itemSize = CGSizeMake(itemWidth, itemHeight);
+        layout.minimumInteritemSpacing = 5;
+        layout.minimumLineSpacing = 5;
+        
+        _customerCollectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
+        [_customerCollectionView setDataSource:self];
+        [_customerCollectionView setDelegate:self];
+        [_customerCollectionView setBackgroundColor:[UIColor clearColor]];
+
+        _customerCollectionView.emptyAlertImage = @"exception_search";
+        _customerCollectionView.emptyAlertTitle = @"未查询到客户信息!";
+        _customerCollectionView.mj_header = self.refreshHeader;
+        _customerCollectionView.mj_footer = self.refreshFooter;
+        [_customerCollectionView registerNib:[UINib nibWithNibName:@"IPCSaleserCustomerCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:customerIdentifier];
+        [_customerCollectionView registerNib:[UINib nibWithNibName:@"IPCSaleserMemberCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:memberIdentifier];
     }
+    return _customerCollectionView;
+}
+
+- (void)loadCollectionView
+{
+    [self addSubview:self.customerCollectionView];
     
-    UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc]init];
-    layout.itemSize = CGSizeMake(itemWidth, itemHeight);
-    layout.minimumInteritemSpacing = 10;
-    layout.minimumLineSpacing = 10;
-    
-    [_customerCollectionView setCollectionViewLayout:layout];
-    _customerCollectionView.emptyAlertImage = @"exception_search";
-    _customerCollectionView.emptyAlertTitle = @"未查询到客户信息!";
-    _customerCollectionView.mj_header = self.refreshHeader;
-    _customerCollectionView.mj_footer = self.refreshFooter;
-    [_customerCollectionView registerNib:[UINib nibWithNibName:@"IPCSaleserCustomerCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:customerIdentifier];
-    [_customerCollectionView registerNib:[UINib nibWithNibName:@"IPCSaleserMemberCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:memberIdentifier];
+    [self.customerCollectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.mas_top).with.offset(0);
+        make.left.equalTo(self.mas_left).with.offset(0);
+        make.right.equalTo(self.mas_right).with.offset(0);
+        make.bottom.equalTo(self.mas_bottom).with.offset(0);
+    }];
 }
 
 - (IPCRefreshAnimationHeader *)refreshHeader{

@@ -50,8 +50,7 @@
 - (IPCSaleserCustomerListView *)customListView{
     if (!_customListView) {
         __weak typeof(self) weakSelf = self;
-        _customListView = [[IPCSaleserCustomerListView alloc]initWithFrame:self.rightContentView.bounds
-                                                             IsChooseStatus:YES
+        _customListView = [[IPCSaleserCustomerListView alloc]initWithIsChooseStatus:YES
                                                                      Detail:^(IPCCustomerMode *customer, BOOL isMemberReload)
                            {
                                __strong typeof(weakSelf) strongSelf = weakSelf;

@@ -10,10 +10,9 @@
 
 @interface IPCSaleserCustomerListView : UIView
 
-- (instancetype)initWithFrame:(CGRect)frame
-               IsChooseStatus:(BOOL)isChoose
-                       Detail:(void(^)(IPCCustomerMode * customer, BOOL isMemberReload))detail
-                   SelectType:(void(^)(BOOL isSelectMemeber))isMember;
+- (instancetype)initWithIsChooseStatus:(BOOL)isChoose
+                                Detail:(void(^)(IPCCustomerMode * customer, BOOL isMemberReload))detail
+                            SelectType:(void(^)(BOOL isSelectMemeber))isMember;
 
 - (void)reload;
 

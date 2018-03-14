@@ -13,11 +13,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *customerNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *customerLevelLabel;
 @property (weak, nonatomic) IBOutlet UILabel *customerPhoneLabel;
-@property (weak, nonatomic) IBOutlet UIButton *headButton;
-@property (weak, nonatomic) IBOutlet UIButton *phoneButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *nameWidth;
-@property (weak, nonatomic) IBOutlet UIImageView *line;
-
 
 @property (copy, nonatomic) IPCCustomerMode * currentCustomer;
 

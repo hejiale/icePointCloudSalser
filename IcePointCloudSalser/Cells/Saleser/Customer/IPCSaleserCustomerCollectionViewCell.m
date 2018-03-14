@@ -39,17 +39,11 @@
             [self.customerPhoneLabel setTextColor:COLOR_RGB_BLUE];
             [self.customerLevelLabel setTextColor:COLOR_RGB_BLUE];
             [self addBorder:0 Width:1 Color:COLOR_RGB_BLUE];
-            [self.line setBackgroundColor:COLOR_RGB_BLUE];
-            [self.headButton setSelected:YES];
-            [self.phoneButton setSelected:YES];
         }else{
             [self.customerNameLabel setTextColor:[UIColor jk_colorWithHexString:@"#333333"]];
             [self.customerPhoneLabel setTextColor:[UIColor jk_colorWithHexString:@"#999999"]];
             [self.customerLevelLabel setTextColor:[UIColor jk_colorWithHexString:@"#999999"]];
-            [self.line setBackgroundColor:[UIColor jk_colorWithHexString:@"#999999"]];
             [self addBorder:0 Width:0 Color:nil];
-            [self.headButton setSelected:NO];
-            [self.phoneButton setSelected:NO];
         }
     }
 }
