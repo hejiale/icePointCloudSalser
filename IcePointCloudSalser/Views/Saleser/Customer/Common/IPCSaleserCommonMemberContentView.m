@@ -174,7 +174,7 @@
 }
 
 #pragma mark //Clicked Events
-- (IBAction)validationMemberAction:(id)sender
+- (void)validationMemberAction:(id)sender
 {
 //    __weak typeof(self) weakSelf = self;
 //    IPCScanCodeViewController *scanVc = [[IPCScanCodeViewController alloc] initWithFinish:^(NSString *result, NSError *error) {
@@ -187,11 +187,8 @@
 }
 
 ///强制验证通过
-- (IBAction)compulsoryVerificationAction:(id)sender {
-    [IPCPayOrderManager sharedManager].isValiateMember = YES;
-    [IPCPayOrderManager sharedManager].memberCheckType = @"COMPEL";
-    [IPCPayOrderManager sharedManager].customDiscount = [[IPCShoppingCart sharedCart] customDiscount];
-    //    [self loadCustomerMemberInfoView:isSelectMemberStatus];
+- (void)compulsoryVerificationAction:(id)sender {
+  
 }
 
 
@@ -204,18 +201,11 @@
     {
         if (isChoose) {
             [self.memberInfoView updateMemberCardInfo:[IPCPayOrderCurrentCustomer sharedManager].currentMember];
-            [self.memberCardContentView addSubview:self.memberInfoView];
+            [self loadMemberInfoView];
         }else{
             if ([IPCPayOrderCurrentCustomer sharedManager].currentCustomer.memberLevel) {
                 [self.memberInfoView updateMemberCardInfo:[IPCPayOrderCurrentCustomer sharedManager].currentCustomer];
-                [self.memberCardContentView addSubview:self.memberInfoView];
-                
-                [self.memberInfoView mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.left.equalTo(self.memberCardContentView.mas_left).with.offset(0);
-                    make.right.equalTo(self.memberCardContentView.mas_right).with.offset(0);
-                    make.top.equalTo(self.memberCardContentView.mas_top).with.offset(0);
-                    make.bottom.equalTo(self.memberCardContentView.mas_bottom).with.offset(0);
-                }];
+                [self loadMemberInfoView];
             }else{
                 [self.memberCardContentView addSubview:self.customerUpgraderView];
                 [self.customerUpgraderView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -250,6 +240,16 @@
 //            [self.memberAlertView updateUI:isSelectMemberStatus];
         }
     }
+}
+
+- (void)loadMemberInfoView{
+    [self.memberCardContentView addSubview:self.memberInfoView];
+    [self.memberInfoView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.memberCardContentView.mas_left).with.offset(0);
+        make.right.equalTo(self.memberCardContentView.mas_right).with.offset(0);
+        make.top.equalTo(self.memberCardContentView.mas_top).with.offset(0);
+        make.bottom.equalTo(self.memberCardContentView.mas_bottom).with.offset(0);
+    }];
 }
 
 - (void)clearMemberInfoView

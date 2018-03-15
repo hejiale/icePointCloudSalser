@@ -12,4 +12,6 @@
 
 - (void)loadCustomerInfoView:(IPCCustomerMode *)customer;
 
+- (void)loadMemberCustomerListView:(NSArray<IPCCustomerMode *> *)customerList;
+
 @end

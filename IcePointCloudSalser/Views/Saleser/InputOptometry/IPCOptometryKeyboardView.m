@@ -104,7 +104,7 @@
         }
         [self.appendString appendString:number];
         
-        if (self.index == 5 || self.index == 6) {
+        if (self.index == 5 || self.index == 10) {
             if ([self.appendString containsString:@"mm"]) {
                 NSRange rang = [self.appendString rangeOfString:@"mm"];
                 [self.appendString deleteCharactersInRange:NSMakeRange(rang.location, 2)];
@@ -139,11 +139,12 @@
         }
     } else if (sender.tag == ClearKeyboardType){
         if (self.appendString.length) {
-            if (self.index == 5 || self.index == 6) {
+            if (self.index == 5 || self.index == 10) {
                 if ([self.appendString containsString:@"mm"]) {
                     NSRange rang = [self.appendString rangeOfString:@"mm"];
                     [self.appendString deleteCharactersInRange:NSMakeRange(rang.location, 2)];
                 }
+                
                 [self.appendString deleteCharactersInRange:NSMakeRange(self.appendString.length-1, 1)];
                 
                 if (self.appendString.length) {

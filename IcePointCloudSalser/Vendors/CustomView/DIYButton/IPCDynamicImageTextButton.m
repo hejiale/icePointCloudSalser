@@ -22,15 +22,12 @@
 
 @implementation IPCDynamicImageTextButton
 
-- (instancetype)initWithFrame:(CGRect)frame{
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self setUserInteractionEnabled:YES];
-        
-        [self addSubview:self.titleLabel];
-        [self addSubview:self.imageView];
-    }
-    return self;
+- (void)layoutSubviews{
+    [super layoutSubviews];
+    
+    [self setUserInteractionEnabled:YES];
+    [self addSubview:self.titleLabel];
+    [self addSubview:self.imageView];
 }
 
 - (UILabel *)titleLabel{

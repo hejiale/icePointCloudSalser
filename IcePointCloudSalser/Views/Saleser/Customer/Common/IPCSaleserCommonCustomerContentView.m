@@ -10,16 +10,16 @@
 #import "IPCSaleserCustomInfoView.h"
 #import "IPCSaleserCustomerAlertView.h"
 #import "IPCSaleserMemberNoneCustomerView.h"
+#import "IPCSaleserMemberCustomerListView.h"
 
 @interface IPCSaleserCommonCustomerContentView()
 
 @property (strong, nonatomic)   UIButton *editButton;
 @property (strong, nonatomic)   UIView *customInfoContentView;
-
-
 @property (nonatomic, strong) IPCSaleserCustomerAlertView*customerAlertView;
 @property (nonatomic, strong) IPCSaleserCustomInfoView * infoView;
 @property (nonatomic, strong) IPCSaleserMemberNoneCustomerView * memberNoneCustomerView;
+@property (nonatomic, strong) IPCSaleserMemberCustomerListView * memberCustomerListView;
 
 @end
 
@@ -126,7 +126,7 @@
 - (IPCSaleserMemberNoneCustomerView *)memberNoneCustomerView{
     if (!_memberNoneCustomerView) {
         __weak typeof(self) weakSelf = self;
-        _memberNoneCustomerView = [[IPCSaleserMemberNoneCustomerView alloc]initWithFrame:self.customInfoContentView.bounds];
+        _memberNoneCustomerView = [[IPCSaleserMemberNoneCustomerView alloc]init];
         [[_memberNoneCustomerView rac_signalForSelector:@selector(bindCustomerAction:)] subscribeNext:^(RACTuple * _Nullable x) {
 //            [weakSelf loadMemberChooseCustomerView];
         }];
@@ -138,6 +138,19 @@
         }];
     }
     return _memberNoneCustomerView;
+}
+
+- (IPCSaleserMemberCustomerListView *)memberCustomerListView{
+    if (!_memberCustomerListView) {
+        __weak typeof(self) weakSelf = self;
+        _memberCustomerListView = [[IPCSaleserMemberCustomerListView alloc]initWithFrame:self.customInfoContentView.bounds Select:^(IPCCustomerMode *customer)
+                                   {
+                                       __strong typeof(weakSelf) strongSelf = weakSelf;
+                                       [IPCPayOrderCurrentCustomer sharedManager].currentMemberCustomer = customer;
+                                       [weakSelf loadCustomerInfoView:customer];
+                                   }];
+    }
+    return _memberCustomerListView;
 }
 
 #pragma mark //Load Events
@@ -170,12 +183,43 @@
     }
 }
 
+- (void)loadMemberCustomerListView:(NSArray<IPCCustomerMode *> *)customerList
+{
+        [self clearCustomerInfoView];
+        [self.editButton setHidden:YES];
+    
+        if (customerList.count) {
+            if (customerList.count > 1) {
+                [self.memberCustomerListView reloadCustomerListView:customerList];
+                [self.customInfoContentView addSubview:self.memberCustomerListView];
+                [self.memberCustomerListView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.equalTo(self.customInfoContentView.mas_left).with.offset(0);
+                    make.right.equalTo(self.customInfoContentView.mas_right).with.offset(0);
+                    make.top.equalTo(self.customInfoContentView.mas_top).with.offset(0);
+                    make.bottom.equalTo(self.customInfoContentView.mas_bottom).with.offset(0);
+                }];
+            }else{
+                IPCCustomerMode * customer = customerList[0];
+                [IPCPayOrderCurrentCustomer sharedManager].currentMemberCustomer = customer;
+                [self loadCustomerInfoView:customer];
+            }
+        }else{
+            [self.customInfoContentView addSubview:self.memberNoneCustomerView];
+            [self.memberNoneCustomerView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(self.customInfoContentView.mas_left).with.offset(0);
+                make.right.equalTo(self.customInfoContentView.mas_right).with.offset(0);
+                make.top.equalTo(self.customInfoContentView.mas_top).with.offset(0);
+                make.bottom.equalTo(self.customInfoContentView.mas_bottom).with.offset(0);
+            }];
+        }
+}
+
 - (void)clearCustomerInfoView
 {
     [self.infoView removeFromSuperview];self.infoView = nil;
     [self.customerAlertView removeFromSuperview];self.customerAlertView = nil;
     [self.memberNoneCustomerView removeFromSuperview];self.memberNoneCustomerView = nil;
-//    [self.memberCustomerListView removeFromSuperview];self.memberCustomerListView = nil;
+    [self.memberCustomerListView removeFromSuperview];self.memberCustomerListView = nil;
 }
 
 @end

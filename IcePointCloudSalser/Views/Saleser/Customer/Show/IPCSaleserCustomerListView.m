@@ -24,13 +24,9 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
 }
 @property (strong, nonatomic)  UICollectionView *customerCollectionView;
 @property (strong, nonatomic)  UIView *searchTypeView;
-@property (strong, nonatomic)  UIView *rightButtonView;
 @property (strong, nonatomic)  UITextField *searchTextField;
 @property (strong, nonatomic)  UIButton *insertButton;
-
-@property (strong, nonatomic)  NSLayoutConstraint *collectionViewBottom;
-@property (strong, nonatomic)  NSLayoutConstraint *rightButtonViewWidth;
-
+@property (strong, nonatomic)  UIView * textFieldRightView;
 @property (nonatomic, strong) IPCRefreshAnimationHeader   *refreshHeader;
 @property (nonatomic, strong) IPCRefreshAnimationFooter    *refreshFooter;
 @property (nonatomic, strong) IPCCustomerListViewModel    * viewModel;
@@ -58,7 +54,7 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
     [super layoutSubviews];
     
     [self setBackgroundColor:[UIColor clearColor]];
-    [self loadCollectionView];
+    [self loadUI];
     
 //    if (!chooseStatus) {
 //        [self reloadCollectionViewUI];
@@ -71,6 +67,81 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
 }
 
 #pragma mark //Set UI
+- (void)loadUI
+{
+    UIView * searchContentView = [[UIView alloc]init];
+    [searchContentView setBackgroundColor:[UIColor whiteColor]];
+    [self addSubview:searchContentView];
+    [searchContentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.mas_left).with.offset(0);
+        make.top.equalTo(self.mas_top).with.offset(0);
+        make.right.equalTo(self.mas_right).with.offset(0);
+        make.height.mas_equalTo(50);
+    }];
+    
+    [self loadCollectionView];
+    
+    [searchContentView addSubview:self.searchTextField];
+    [self.searchTextField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(searchContentView.mas_left).with.offset(5);
+        make.top.equalTo(searchContentView.mas_top).with.offset(0);
+        make.bottom.equalTo(searchContentView.mas_bottom).with.offset(0);
+        make.right.equalTo(searchContentView.mas_right).with.offset(0);
+    }];
+    
+    [self.searchTextField setRightView:self.textFieldRightView];
+    [self.searchTextField setRightViewMode:UITextFieldViewModeAlways];
+    
+    [self.textFieldRightView addSubview:self.typeButton];
+    [self.typeButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.textFieldRightView.mas_top).with.offset(0);
+        make.bottom.equalTo(self.textFieldRightView.mas_bottom).with.offset(0);
+        make.left.equalTo(self.textFieldRightView.mas_left).with.offset(0);
+        make.right.equalTo(self.textFieldRightView.mas_right).with.offset(0);
+    }];
+    
+    [self addSubview:self.searchTypeView];
+    [self.searchTypeView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(searchContentView.mas_bottom).with.offset(0);
+        make.right.equalTo(searchContentView.mas_right).with.offset(0);
+        make.width.mas_equalTo(120);
+        make.height.mas_equalTo(120);
+    }];
+    
+    [self addSubview:self.insertButton];
+    [self.insertButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.mas_centerX).with.offset(0);
+        make.bottom.equalTo(self.mas_bottom).with.offset(0);
+        make.width.mas_equalTo(220);
+        make.height.mas_equalTo(50);
+    }];
+}
+
+
+- (void)loadCollectionView
+{
+    if ([self.customerCollectionView superview]) {
+        [self.customerCollectionView removeFromSuperview];
+        self.customerCollectionView = nil;
+    }
+    
+    CGFloat itemHeight = (self.jk_height-30-60)/7;
+    [self addSubview:self.customerCollectionView];
+    [self.customerCollectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.mas_top).with.offset(55);
+        make.left.equalTo(self.mas_left).with.offset(0);
+        make.right.equalTo(self.mas_right).with.offset(0);
+        
+        if (isSelectMember) {
+            make.bottom.equalTo(self.mas_bottom).with.offset(0);
+        }else{
+            make.bottom.equalTo(self.mas_bottom).with.offset(-(itemHeight+5));
+        }
+    }];
+    
+    [self reloadCollectionViewUI];
+}
+
 - (UICollectionView *)customerCollectionView{
     if (!_customerCollectionView) {
         CGFloat itemWidth = 0;
@@ -104,16 +175,96 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
     return _customerCollectionView;
 }
 
-- (void)loadCollectionView
-{
-    [self addSubview:self.customerCollectionView];
-    
-    [self.customerCollectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.mas_top).with.offset(0);
-        make.left.equalTo(self.mas_left).with.offset(0);
-        make.right.equalTo(self.mas_right).with.offset(0);
-        make.bottom.equalTo(self.mas_bottom).with.offset(0);
-    }];
+- (UIView *)textFieldRightView{
+    if (!_textFieldRightView) {
+        _textFieldRightView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 80, 50)];
+    }
+    return _textFieldRightView;
+}
+
+
+- (UITextField *)searchTextField{
+    if (!_searchTextField) {
+        _searchTextField = [[UITextField alloc]init];
+        [_searchTextField setBackgroundColor:[UIColor clearColor]];
+        [_searchTextField setPlaceholder:searchCustomerPlaceHolder];
+        [_searchTextField setTextColor:[UIColor colorWithHexString:@"#666666"]];
+        [_searchTextField setLeftImageView:@"icon_search"];
+        [_searchTextField setFont:[UIFont systemFontOfSize:14]];
+        [_searchTextField setDelegate:self];
+    }
+    return _searchTextField;
+}
+
+- (UIView *)searchTypeView{
+    if (!_searchTypeView) {
+        _searchTypeView = [[UIView alloc]init];
+        [_searchTypeView setBackgroundColor:[UIColor clearColor]];
+        [_searchTypeView setHidden:YES];
+        
+        UIImageView * bgImageView = [[UIImageView alloc]init];
+        [bgImageView setImage:[UIImage imageNamed:@"icon_searchType"]];
+        [bgImageView setBackgroundColor:[UIColor clearColor]];
+        [_searchTypeView addSubview:bgImageView];
+        [bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(_searchTypeView.mas_left).with.offset(0);
+            make.right.equalTo(_searchTypeView.mas_right).with.offset(0);
+            make.top.equalTo(_searchTypeView.mas_top).with.offset(0);
+            make.bottom.equalTo(_searchTypeView.mas_bottom).with.offset(0);
+        }];
+        
+        UIButton * customerButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [customerButton setTitle:@"客户" forState:UIControlStateNormal];
+        [customerButton setTitleColor:[UIColor colorWithHexString:@"#333333"] forState:UIControlStateNormal];
+        [customerButton.titleLabel setFont:[UIFont systemFontOfSize:15]];
+        [customerButton addTarget:self action:@selector(searchWithCustomerAction:) forControlEvents:UIControlEventTouchUpInside];
+        [_searchTypeView addSubview:customerButton];
+        
+        UIView * line = [[UIView alloc]init];
+        [line setBackgroundColor:[UIColor colorWithHexString:@"#EDEDED"]];
+        [_searchTypeView addSubview:line];
+        
+        UIButton * memberButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [memberButton setTitle:@"会员" forState:UIControlStateNormal];
+        [memberButton setTitleColor:[UIColor colorWithHexString:@"#333333"] forState:UIControlStateNormal];
+        [memberButton.titleLabel setFont:[UIFont systemFontOfSize:15]];
+        [memberButton addTarget:self action:@selector(searchWithMemberAction:) forControlEvents:UIControlEventTouchUpInside];
+        [_searchTypeView addSubview:memberButton];
+        
+        [customerButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(_searchTypeView.mas_top).with.offset(10);
+            make.left.equalTo(_searchTypeView.mas_left).with.offset(0);
+            make.right.equalTo(_searchTypeView.mas_right).with.offset(0);
+            make.height.mas_equalTo(50);
+        }];
+        
+        [line mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(customerButton.mas_bottom).with.offset(0);
+            make.left.equalTo(_searchTypeView.mas_left).with.offset(8);
+            make.right.equalTo(_searchTypeView.mas_right).with.offset(8);
+            make.height.mas_equalTo(1);
+        }];
+        
+        [memberButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(line.mas_bottom).with.offset(0);
+            make.left.equalTo(_searchTypeView.mas_left).with.offset(0);
+            make.right.equalTo(_searchTypeView.mas_right).with.offset(0);
+            make.height.mas_equalTo(50);
+        }];
+        
+    }
+    return _searchTypeView;
+}
+
+- (UIButton *)insertButton{
+    if (!_insertButton) {
+        _insertButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_insertButton setBackgroundColor:COLOR_RGB_BLUE];
+        [_insertButton setTitle:@"新增客户" forState:UIControlStateNormal];
+        [_insertButton.titleLabel setFont:[UIFont systemFontOfSize:16]];
+        [_insertButton addTarget:self action:@selector(insertCustomerAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _insertButton;
 }
 
 - (IPCRefreshAnimationHeader *)refreshHeader{
@@ -131,7 +282,7 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
 
 - (IPCDynamicImageTextButton *)typeButton{
     if (!_typeButton) {
-        _typeButton = [[IPCDynamicImageTextButton alloc]initWithFrame:self.rightButtonView.bounds];
+        _typeButton = [[IPCDynamicImageTextButton alloc]initWithFrame:self.textFieldRightView.bounds];
         [_typeButton setImage:[UIImage imageNamed:@"icon_down_arrow"] forState:UIControlStateNormal];
         [_typeButton setTitleColor:COLOR_RGB_BLUE];
         [_typeButton setTitle:@"客户"];
@@ -148,7 +299,6 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
     //Stop Footer Refresh Method
     if (self.refreshFooter.isRefreshing) {
         [self.refreshFooter endRefreshing];
-//        [IPCHttpRequest  cancelAllRequest];
     }
     [self.refreshFooter resetDataStatus];
     [self.viewModel resetData];
@@ -235,7 +385,7 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
 }
 
 #pragma mark //Clicked Events
-- (IBAction)searchWithCustomerAction:(id)sender
+- (void)searchWithCustomerAction:(id)sender
 {
     [self.searchTypeView setHidden:YES];
     
@@ -246,7 +396,7 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
 }
 
 
-- (IBAction)searchWithMemberAction:(id)sender
+- (void)searchWithMemberAction:(id)sender
 {
     [self.searchTypeView setHidden:YES];
     
@@ -257,17 +407,15 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
 }
 
 
-- (IBAction)insertCustomerAction:(id)sender {
+- (void)insertCustomerAction:(id)sender {
+    
 }
 
 - (void)reloadCollectionViewUI
 {
     if (isSelectMember) {
-        self.collectionViewBottom.constant = 0;
         [self.insertButton setHidden:YES];
     }else{
-        CGFloat itemHeight = (self.jk_height-30-60)/7;
-        self.collectionViewBottom.constant = itemHeight + 5;
         [self.insertButton setHidden:NO];
     }
 }
@@ -285,7 +433,7 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
     isSelectMember = NO;
     [self.typeButton setTitle:@"客户"];
     [self.searchTextField setPlaceholder:searchCustomerPlaceHolder];
-    [self reloadCollectionViewUI];
+    [self loadCollectionView];
     [self loadData];
 }
 
@@ -294,7 +442,7 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
     isSelectMember = YES;
     [self.typeButton setTitle:@"会员"];
     [self.searchTextField setPlaceholder:searchMemberPlaceHolder];
-    [self reloadCollectionViewUI];
+    [self loadCollectionView];
     [self loadData];
 }
 
@@ -310,7 +458,7 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
 
         if (self.viewModel && self.viewModel.customerArray.count) {
             IPCCustomerMode * customer = self.viewModel.customerArray[indexPath.row];
-//            cell.currentCustomer = customer;
+            cell.currentCustomer = customer;
         }
         return cell;
     }else{
