@@ -218,8 +218,6 @@
         make.width.mas_equalTo(65);
         make.height.mas_equalTo(20);
     }];
-    
-    
 }
 
 

@@ -14,9 +14,9 @@
                                 Detail:(void(^)(IPCCustomerMode * customer, BOOL isMemberReload))detail
                             SelectType:(void(^)(BOOL isSelectMemeber))isMember;
 
-- (void)reload;
+- (void)refreshData;
 
-- (void)loadData;
+- (void)reload;
 
 - (void)changeToCustomerStatus;
 

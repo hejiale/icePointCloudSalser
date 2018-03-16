@@ -12,6 +12,5 @@
 
 - (instancetype)initWithFrame:(CGRect)frame DetailCustomer:(IPCCustomerMode*)customer UpdateBlock:(void (^)(IPCCustomerMode * customer))update;
 
-- (void)updateCustomerInfo;
 
 @end

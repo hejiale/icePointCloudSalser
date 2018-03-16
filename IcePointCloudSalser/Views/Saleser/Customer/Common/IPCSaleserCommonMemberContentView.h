@@ -7,8 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "IPCSaleserCommonCustomerDataSource.h"
+#import "IPCSaleserCommonCustomerDelegate.h"
 
 @interface IPCSaleserCommonMemberContentView : UIView
+
+@property (assign, nonatomic) id<IPCSaleserCommonCustomerDataSource>dataSource;
+@property (assign, nonatomic) id<IPCSaleserCommonCustomerDelegate>delegate;
 
 - (void)loadCustomerMemberInfoView:(BOOL)isChoose;
 

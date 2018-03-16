@@ -86,8 +86,7 @@ static char const *  isBeginLoadKey  =  "IsBeginLoadKey";
         [self.emptyAlertView removeFromSuperview];
         self.emptyAlertView = nil;
     }
-    self.emptyAlertView = [[IPCEmptyAlertView alloc]initWithFrame:self.bounds
-                                                       AlertImage:self.emptyAlertImage
+    self.emptyAlertView = [[IPCEmptyAlertView alloc]initWithAlertImage:self.emptyAlertImage
                                                     LoadingImages:nil
                                                        AlertTitle:self.emptyAlertTitle];
     [self addSubview:self.emptyAlertView];
@@ -101,8 +100,7 @@ static char const *  isBeginLoadKey  =  "IsBeginLoadKey";
         [self.errorNetworkAlertView removeFromSuperview];
         self.errorNetworkAlertView = nil;
     }
-    self.errorNetworkAlertView = [[IPCEmptyAlertView alloc]initWithFrame:self.bounds
-                                                              AlertImage:@"exception_network"
+    self.errorNetworkAlertView = [[IPCEmptyAlertView alloc]initWithAlertImage:@"exception_network"
                                                            LoadingImages:nil
                                                               AlertTitle:kIPCErrorNetworkAlertMessage];
     [self addSubview:self.errorNetworkAlertView];
@@ -121,8 +119,7 @@ static char const *  isBeginLoadKey  =  "IsBeginLoadKey";
         [self.loadingAlertView removeFromSuperview];
         self.loadingAlertView = nil;
     }
-    self.loadingAlertView = [[IPCEmptyAlertView alloc]initWithFrame:self.bounds
-                                                              AlertImage:nil
+    self.loadingAlertView = [[IPCEmptyAlertView alloc]initWithAlertImage:nil
                                                            LoadingImages:loadingArray
                                                               AlertTitle:nil];
     [self addSubview:self.loadingAlertView];

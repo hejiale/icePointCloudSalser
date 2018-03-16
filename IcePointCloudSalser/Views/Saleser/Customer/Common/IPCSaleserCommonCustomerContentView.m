@@ -25,14 +25,6 @@
 
 @implementation IPCSaleserCommonCustomerContentView
 
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-    }
-    return self;
-}
-
 - (void)layoutSubviews
 {
     [super layoutSubviews];
@@ -128,13 +120,19 @@
         __weak typeof(self) weakSelf = self;
         _memberNoneCustomerView = [[IPCSaleserMemberNoneCustomerView alloc]init];
         [[_memberNoneCustomerView rac_signalForSelector:@selector(bindCustomerAction:)] subscribeNext:^(RACTuple * _Nullable x) {
-//            [weakSelf loadMemberChooseCustomerView];
+            if ([self.delegate respondsToSelector:@selector(loadMemberChooseCustomerView)]) {
+                [self.delegate loadMemberChooseCustomerView];
+            }
         }];
         [[_memberNoneCustomerView rac_signalForSelector:@selector(createCustomerAction:)] subscribeNext:^(RACTuple * _Nullable x) {
-//            [weakSelf showEditCustomerView:YES];
+            if ([self.delegate respondsToSelector:@selector(showEditCustomerView)]) {
+                [self.delegate showEditCustomerView];
+            }
         }];
         [[_memberNoneCustomerView rac_signalForSelector:@selector(createWithVistorAction:)] subscribeNext:^(RACTuple * _Nullable x) {
-//            [weakSelf queryVisitorCustomer];
+            if ([self.delegate respondsToSelector:@selector(queryVisitorCustomer)]) {
+                [self.delegate queryVisitorCustomer];
+            }
         }];
     }
     return _memberNoneCustomerView;
@@ -173,13 +171,15 @@
         }];
         
         if (![IPCPayOrderManager sharedManager].currentCustomerId && ![IPCPayOrderManager sharedManager].currentMemberCustomerId) {
-//            [self.customerAlertView updateUI:isSelectMemberStatus];
+            [self.customerAlertView updateUI:[self.dataSource isSelectMemberStatus]];
         }
     }
-//    [self resetCustomerData];
+    [self resetCustomerData];
     
     if (!customer.isVisitor) {
-//        [self.viewModel queryCustomerOptometry];
+        if ([self.delegate respondsToSelector:@selector(queryCustomerOptometry)]) {
+            [self.delegate queryCustomerOptometry];
+        }
     }
 }
 
@@ -214,12 +214,28 @@
         }
 }
 
+
+#pragma mark //Clicked Events
+- (void)updateCustomerAction:(id)sender
+{
+    if ([self.delegate respondsToSelector:@selector(updateCustomerInfo)]) {
+        [self.delegate updateCustomerInfo];
+    }
+}
+
 - (void)clearCustomerInfoView
 {
     [self.infoView removeFromSuperview];self.infoView = nil;
     [self.customerAlertView removeFromSuperview];self.customerAlertView = nil;
     [self.memberNoneCustomerView removeFromSuperview];self.memberNoneCustomerView = nil;
     [self.memberCustomerListView removeFromSuperview];self.memberCustomerListView = nil;
+}
+
+- (void)resetCustomerData
+{
+    [[IPCPayOrderManager sharedManager] clearPayRecord];
+    [[IPCPayOrderManager sharedManager] resetCustomerDiscount];
+    [[IPCPayOrderManager sharedManager] calculatePayAmount];
 }
 
 @end

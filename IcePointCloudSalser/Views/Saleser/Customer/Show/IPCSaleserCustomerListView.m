@@ -63,7 +63,6 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
 //        self.rightButtonViewWidth.constant = 0;
 //    }
     self.viewModel = [[IPCCustomerListViewModel alloc]init];
-    [self loadData];
 }
 
 #pragma mark //Set UI
@@ -89,8 +88,10 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
         make.right.equalTo(searchContentView.mas_right).with.offset(0);
     }];
     
-    [self.searchTextField setRightView:self.textFieldRightView];
-    [self.searchTextField setRightViewMode:UITextFieldViewModeAlways];
+    if (!chooseStatus) {
+        [self.searchTextField setRightView:self.textFieldRightView];
+        [self.searchTextField setRightViewMode:UITextFieldViewModeAlways];
+    }
     
     [self.textFieldRightView addSubview:self.typeButton];
     [self.typeButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -132,7 +133,7 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
         make.left.equalTo(self.mas_left).with.offset(0);
         make.right.equalTo(self.mas_right).with.offset(0);
         
-        if (isSelectMember) {
+        if (isSelectMember || chooseStatus) {
             make.bottom.equalTo(self.mas_bottom).with.offset(0);
         }else{
             make.bottom.equalTo(self.mas_bottom).with.offset(-(itemHeight+5));
@@ -148,8 +149,8 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
         CGFloat itemHeight = 0;
         
         if (chooseStatus) {
-            itemWidth = (self.jk_width-10)/2;
-            itemHeight = (self.jk_height-40-60)/5;
+            itemWidth = (self.jk_width-5)/2;
+            itemHeight = (self.jk_height-20-60)/5;
         }else{
             itemWidth = (self.jk_width-10)/3;
             itemHeight = (self.jk_height-30-60)/7;
@@ -171,6 +172,7 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
         _customerCollectionView.mj_footer = self.refreshFooter;
         [_customerCollectionView registerNib:[UINib nibWithNibName:@"IPCSaleserCustomerCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:customerIdentifier];
         [_customerCollectionView registerNib:[UINib nibWithNibName:@"IPCSaleserMemberCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:memberIdentifier];
+        [self.refreshHeader beginRefreshing];
     }
     return _customerCollectionView;
 }
@@ -301,6 +303,7 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
         [self.refreshFooter endRefreshing];
     }
     [self.refreshFooter resetDataStatus];
+    
     [self.viewModel resetData];
     if (isSelectMember) {
         [self loadMemberList];
@@ -317,20 +320,6 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
     }else{
         [self loadCustomerList];
     }
-}
-
-#pragma mark //Load Data
-- (void)loadData
-{
-    [self.viewModel resetData];
-    self.customerCollectionView.isBeginLoad = YES;
-    
-    if (isSelectMember) {
-        [self loadMemberList];
-    }else{
-        [self loadCustomerList];
-    }
-    [self.customerCollectionView reloadData];
 }
 
 #pragma mark //Request Data
@@ -367,6 +356,11 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
 }
 
 #pragma mark //Reload CollectionView
+- (void)refreshData
+{
+    [self.refreshHeader beginRefreshing];
+}
+
 - (void)reload
 {
     self.customerCollectionView.isBeginLoad = NO;
@@ -413,7 +407,7 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
 
 - (void)reloadCollectionViewUI
 {
-    if (isSelectMember) {
+    if (isSelectMember || chooseStatus) {
         [self.insertButton setHidden:YES];
     }else{
         [self.insertButton setHidden:NO];
@@ -434,7 +428,6 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
     [self.typeButton setTitle:@"客户"];
     [self.searchTextField setPlaceholder:searchCustomerPlaceHolder];
     [self loadCollectionView];
-    [self loadData];
 }
 
 - (void)changeToMemberStatus
@@ -443,7 +436,6 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
     [self.typeButton setTitle:@"会员"];
     [self.searchTextField setPlaceholder:searchMemberPlaceHolder];
     [self loadCollectionView];
-    [self loadData];
 }
 
 #pragma mark //UICollectionViewDataSource
@@ -466,11 +458,11 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
         
         if (self.viewModel && self.viewModel.customerArray.count) {
             IPCCustomerMode * customer = self.viewModel.customerArray[indexPath.row];
-//            if (chooseStatus) {
-//                cell.selectCustomerId = currentSelectCustomer;
-//            }else{
-//                cell.selectCustomerId = [IPCPayOrderManager sharedManager].currentCustomerId;
-//            }
+            if (chooseStatus) {
+                cell.selectCustomerId = currentSelectCustomer;
+            }else{
+                cell.selectCustomerId = [IPCPayOrderManager sharedManager].currentCustomerId;
+            }
             cell.currentCustomer = customer;
         }
         return cell;
@@ -548,7 +540,7 @@ static NSString * const memberIdentifier = @"IPCPayOrderMemberCollectionViewCell
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     self.viewModel.searchWord = [textField.text jk_trimmingWhitespace];
-    [self loadData];
+    [self.refreshHeader beginRefreshing];
 }
 
 

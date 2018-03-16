@@ -14,7 +14,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *customerLevelLabel;
 @property (weak, nonatomic) IBOutlet UILabel *customerPhoneLabel;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *nameWidth;
-
+@property (copy, nonatomic) NSString * selectCustomerId;
 @property (copy, nonatomic) IPCCustomerMode * currentCustomer;
 
 @end

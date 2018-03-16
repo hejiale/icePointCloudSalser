@@ -661,6 +661,8 @@
 		CBF0F5FF1FC69D3400647A42 /* IPCPayCashIntegralTrade.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IPCPayCashIntegralTrade.m; sourceTree = "<group>"; };
 		CBF0F6011FC6BCA900647A42 /* IPCEmployee.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IPCEmployee.h; sourceTree = "<group>"; };
 		CBF0F6021FC6BCA900647A42 /* IPCEmployee.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IPCEmployee.m; sourceTree = "<group>"; };
+		CBF1595C205B69D60038C90A /* IPCSaleserCommonCustomerDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IPCSaleserCommonCustomerDataSource.h; sourceTree = "<group>"; };
+		CBF1595D205B69E90038C90A /* IPCSaleserCommonCustomerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IPCSaleserCommonCustomerDelegate.h; sourceTree = "<group>"; };
 		CBF9357B1FCFA7B200D844AB /* IPCCustomTextFieldDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IPCCustomTextFieldDelegate.h; sourceTree = "<group>"; };
 		D57A18F14EE64419E926539B /* Pods-IcePointCloud.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IcePointCloud.release.xcconfig"; path = "Pods/Target Support Files/Pods-IcePointCloud/Pods-IcePointCloud.release.xcconfig"; sourceTree = "<group>"; };
 		E6544779C1E58E9C62B6E937 /* Pods_IcePointCloudSalser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IcePointCloudSalser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1752,6 +1754,8 @@
 				CBC2118A2057C3440005C662 /* IPCSaleserCommonCustomerContentView.m */,
 				CBC2118E2057C3670005C662 /* IPCSaleserCommonMemberContentView.h */,
 				CBC2118F2057C3670005C662 /* IPCSaleserCommonMemberContentView.m */,
+				CBF1595C205B69D60038C90A /* IPCSaleserCommonCustomerDataSource.h */,
+				CBF1595D205B69E90038C90A /* IPCSaleserCommonCustomerDelegate.h */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1791,9 +1795,9 @@
 		CBEDD458200734F200F78C9A /* Customer */ = {
 			isa = PBXGroup;
 			children = (
-				CBC211882057C3190005C662 /* Common */,
 				CB9ADF872028557F0097D91B /* IPCSaleserCommonCustomerView.h */,
 				CB9ADF882028557F0097D91B /* IPCSaleserCommonCustomerView.m */,
+				CBC211882057C3190005C662 /* Common */,
 				CBC7E3352010728E00096D53 /* UpgradeMember */,
 				CBEDD45B20073C4100F78C9A /* Update */,
 				CBEDD45A20073C3300F78C9A /* Show */,

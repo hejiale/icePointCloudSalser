@@ -33,7 +33,7 @@
             [self.customerLevelLabel setText:@"非会员"];
         }
         
-        if ([_currentCustomer.customerID integerValue] == [[IPCPayOrderManager sharedManager].currentCustomerId integerValue])
+        if ([_currentCustomer.customerID integerValue] == [self.selectCustomerId integerValue])
         {
             [self.customerNameLabel setTextColor:COLOR_RGB_BLUE];
             [self.customerPhoneLabel setTextColor:COLOR_RGB_BLUE];

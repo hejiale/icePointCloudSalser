@@ -42,6 +42,13 @@
     [super layoutSubviews];
     
     [self.rightContentView addSubview:self.customListView];
+    [self.customListView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.rightContentView.mas_top).with.offset(0);
+        make.bottom.equalTo(self.rightContentView.mas_bottom).with.offset(0);
+        make.left.equalTo(self.rightContentView.mas_left).with.offset(0);
+        make.right.equalTo(self.rightContentView.mas_right).with.offset(0);
+    }];
+    
     [self.cancelButton addBorder:3 Width:1 Color:COLOR_RGB_BLUE];
     [self.sureButton addBorder:3 Width:0 Color:nil];
 }

@@ -17,11 +17,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *maleButton;
 @property (weak, nonatomic) IBOutlet UIButton *femaleButton;
 @property (weak, nonatomic) IBOutlet UITextField *customerTypeTextField;
-@property (weak, nonatomic) IBOutlet UITextField *encryptedPhoneTextField;
+@property (weak, nonatomic) IBOutlet UITextField *storeTextField;
 @property (weak, nonatomic) IBOutlet UIView *editContentView;
-@property (weak, nonatomic) IBOutlet UIView *membePhoneView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *contentHeight;
-@property (strong, nonatomic) IPCDetailCustomer * detailCustomer;
+@property (strong, nonatomic) IPCCustomerMode * detailCustomer;
 @property (copy, nonatomic) void(^UpdateBlock)(IPCCustomerMode*);
 
 @end
@@ -34,6 +32,7 @@
     if (self)
     {
         self.UpdateBlock = update;
+        self.detailCustomer = customer;
         
         UIView * view = [UIView jk_loadInstanceFromNibWithName:@"IPCSaleserUpdateCustomerView" owner:self];
         [view setFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
@@ -52,41 +51,41 @@
             [textFiedld addBottomLine];
         }
     }];
-    [self.encryptedPhoneTextField addBottomLine];
     
     [self.birthdayTextField setRightButton:self Action:@selector(showDatePickerAction) OnView:self.editContentView];
     [self.customerTypeTextField setRightButton:self Action:@selector(selectCustomTypeAction) OnView:self.editContentView];
+    [self.storeTextField setRightButton:self Action:@selector(selectStoreAction) OnView:self.editContentView];
     
     [[IPCCustomerManager sharedManager] queryCustomerType];
     [self.customerTypeTextField setText: @"自然进店"];
+    
+    [self updateCustomerInfo];
 }
 
 
 - (void)updateCustomerInfo
 {
-    self.detailCustomer = [IPCPayOrderCurrentCustomer sharedManager].currentCustomer;
-    
-    [self.customerNameTextField setText:self.detailCustomer.customerName];
-    [self.phoneTextFiel setText:self.detailCustomer.customerPhone];
-    [self.ageTextField setText:self.detailCustomer.age];
-    [self.birthdayTextField setText:self.detailCustomer.birthday];
-    [self.customerTypeTextField setText:self.detailCustomer.customerType];
-    [self.encryptedPhoneTextField setText:self.detailCustomer.memberPhone];
-    
-    if ([self.detailCustomer.gender isEqualToString:@"MALE"]) {
-        [self.maleButton setSelected:YES];
-        [self.femaleButton setSelected:NO];
-    }else if ([self.detailCustomer.gender isEqualToString:@"FEMALE"]){
-        [self.femaleButton setSelected:YES];
-        [self.maleButton setSelected:NO];
-    }
-    
-    if (!self.detailCustomer.memberLevel) {
-        [self.membePhoneView setHidden:YES];
-        self.contentHeight.constant = 500;
-    }else{
-        [self.membePhoneView setHidden:NO];
-        self.contentHeight.constant = 550;
+    if (self.detailCustomer)
+    {
+        [self.customerNameTextField setText:self.detailCustomer.customerName];
+        [self.phoneTextFiel setText:self.detailCustomer.customerPhone];
+        [self.ageTextField setText:self.detailCustomer.age];
+        [self.birthdayTextField setText:self.detailCustomer.birthday];
+        [self.customerTypeTextField setText:self.detailCustomer.customerType];
+        
+        if (self.detailCustomer.createStoreName.length) {
+            [self.storeTextField setText:self.detailCustomer.createStoreName];
+        }else{
+            [self.storeTextField setText:@"无门店"];
+        }
+        
+        if ([self.detailCustomer.gender isEqualToString:@"MALE"]) {
+            [self.maleButton setSelected:YES];
+            [self.femaleButton setSelected:NO];
+        }else if ([self.detailCustomer.gender isEqualToString:@"FEMALE"]){
+            [self.femaleButton setSelected:YES];
+            [self.maleButton setSelected:NO];
+        }
     }
 }
 
@@ -112,6 +111,7 @@
                                                           PhotoId:@""
                                                               Age:self.ageTextField.text
                                                        CustomerId:self.detailCustomer.customerID
+                                                          StoreId:self.storeTextField.text
                                                      SuccessBlock:^(id responseValue)
          {
              __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -135,19 +135,6 @@
     }
 }
 
-- (void)updateMemberPhoneRequest
-{
-    if (![self.encryptedPhoneTextField.text isEqualToString:self.detailCustomer.memberPhone]) {
-        [IPCCustomerRequestManager updateMemberPhoneWithPhone:self.encryptedPhoneTextField.text
-                                                   CustomerId:self.detailCustomer.customerID
-                                                 SuccessBlock:nil
-                                                 FailureBlock:^(NSError *error) {
-                                                     if ([error code] != NSURLErrorCancelled) {
-                                                         [IPCCommonUI showError:@"修改密保手机号失败!"];
-                                                     }
-                                                 }];
-    }
-}
 
 #pragma mark //Clicked Events
 - (IBAction)cancelAction:(id)sender {
@@ -156,9 +143,6 @@
 
 - (IBAction)completeAction:(id)sender {
     [self saveCustomerRequest];
-    if (self.detailCustomer.memberLevel) {
-        [self updateMemberPhoneRequest];
-    }
 }
 
 - (IBAction)selectMaleAction:(id)sender {
@@ -185,6 +169,15 @@
     [parameterTableVC setDataSource:self];
     [parameterTableVC setDelegate:self];
     [parameterTableVC showWithPosition:CGPointMake(self.customerTypeTextField.jk_width/2, self.customerTypeTextField.jk_height) Size:CGSizeMake(200, 150) Owner:self.customerTypeTextField Direction:UIPopoverArrowDirectionUp];
+}
+
+- (void)selectStoreAction
+{
+    IPCParameterTableViewController * parameterTableVC = [[IPCParameterTableViewController alloc]initWithNibName:@"IPCParameterTableViewController" bundle:nil];
+    [parameterTableVC setDataSource:self];
+    [parameterTableVC setDelegate:self];
+    [parameterTableVC.view setTag:100];
+    [parameterTableVC showWithPosition:CGPointMake(self.storeTextField.jk_width/2, self.storeTextField.jk_height) Size:CGSizeMake(200, 150) Owner:self.storeTextField Direction:UIPopoverArrowDirectionUp];
 }
 
 #pragma mark //UITextField Delegate
@@ -214,13 +207,20 @@
 #pragma mark //IPCParameterTableViewDataSource
 - (nonnull NSArray *)parameterDataInTableView:(IPCParameterTableViewController *)tableView
 {
+    if (tableView.view.tag == 100) {
+        return [[IPCCustomerManager sharedManager] storeNameArray];
+    }
     return [IPCCustomerManager sharedManager].customerTypeNameArray;
 }
 
 #pragma mark //IPCParameterTableViewDelegate
 - (void)didSelectParameter:(NSString *)parameter InTableView:(IPCParameterTableViewController *)tableView
 {
-    [self.customerTypeTextField setText:parameter];
+    if (tableView.view.tag == 100) {
+        [self.storeTextField setText:parameter];
+    }else{
+        [self.customerTypeTextField setText:parameter];
+    }
 }
 
 @end

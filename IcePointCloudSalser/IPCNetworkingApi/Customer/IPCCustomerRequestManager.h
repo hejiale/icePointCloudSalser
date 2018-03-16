@@ -67,7 +67,7 @@
 
 /**
  SAVE CUSTOMER INFO
-
+ 
  @param customName
  @param phone
  @param gender
@@ -87,6 +87,7 @@
                                PhotoId:(NSString *)photoId
                                    Age:(NSString *)age
                             CustomerId:(NSString *)customerId
+                               StoreId:(NSString *)storeId
                           SuccessBlock:(void (^)(id responseValue))success
                           FailureBlock:(void (^)(NSError * error))failure;
 
@@ -182,10 +183,10 @@
 
 /**
  Remove Optometry
-
+ 
  @param optometryId
  @param success
- @param failure 
+ @param failure
  */
 + (void)removeOptometry:(NSString *)optometryId
              CustomerId:(NSString *)customerId

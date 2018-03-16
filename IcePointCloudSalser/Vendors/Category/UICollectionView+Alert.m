@@ -83,23 +83,35 @@ static char const *  isBeginLoadKey  =  "IsBeginLoadKey";
 - (void)loadEmptyAlertView{
     [self setContentOffset:CGPointZero];
     
-    self.emptyAlertView = [[IPCEmptyAlertView alloc]initWithFrame:self.bounds
-                                                       AlertImage:self.emptyAlertImage
-                                                    LoadingImages:nil
-                                                       AlertTitle:self.emptyAlertTitle];
+    self.emptyAlertView = [[IPCEmptyAlertView alloc]initWithAlertImage:self.emptyAlertImage
+                                                         LoadingImages:nil
+                                                            AlertTitle:self.emptyAlertTitle];
     [self addSubview:self.emptyAlertView];
     [self bringSubviewToFront:self.emptyAlertView];
+    
+    [self.emptyAlertView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.mas_top).with.offset(0);
+        make.bottom.equalTo(self.mas_bottom).with.offset(0);
+        make.left.equalTo(self.mas_left).with.offset(0);
+        make.right.equalTo(self.mas_right).with.offset(0);
+    }];
 }
 
 - (void)loadErrorNetworkAlertView{
     [self setContentOffset:CGPointZero];
     
-    self.errorNetworkAlertView = [[IPCEmptyAlertView alloc]initWithFrame:self.bounds
-                                                              AlertImage:@"exception_network"
-                                                           LoadingImages:nil
-                                                              AlertTitle:kIPCErrorNetworkAlertMessage];
+    self.errorNetworkAlertView = [[IPCEmptyAlertView alloc]initWithAlertImage:@"exception_network"
+                                                                LoadingImages:nil
+                                                                   AlertTitle:kIPCErrorNetworkAlertMessage];
     [self addSubview:self.errorNetworkAlertView];
     [self bringSubviewToFront:self.errorNetworkAlertView];
+    
+    [self.errorNetworkAlertView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.mas_top).with.offset(0);
+        make.bottom.equalTo(self.mas_bottom).with.offset(0);
+        make.left.equalTo(self.mas_left).with.offset(0);
+        make.right.equalTo(self.mas_right).with.offset(0);
+    }];
 }
 
 - (void)loadIsRefreshingView{
@@ -111,12 +123,18 @@ static char const *  isBeginLoadKey  =  "IsBeginLoadKey";
         [loadingArray addObject:[UIImage imageNamed:[NSString stringWithFormat:@"loading_%ld",(long)i]]];
     }
     
-    self.loadingAlertView = [[IPCEmptyAlertView alloc]initWithFrame:self.bounds
-                                                         AlertImage:nil
-                                                      LoadingImages:loadingArray
-                                                         AlertTitle:nil];
+    self.loadingAlertView = [[IPCEmptyAlertView alloc]initWithAlertImage:nil
+                                                           LoadingImages:loadingArray
+                                                              AlertTitle:nil];
     [self addSubview:self.loadingAlertView];
     [self bringSubviewToFront:self.loadingAlertView];
+    
+    [self.loadingAlertView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.mas_top).with.offset(0);
+        make.bottom.equalTo(self.mas_bottom).with.offset(0);
+        make.left.equalTo(self.mas_left).with.offset(0);
+        make.right.equalTo(self.mas_right).with.offset(0);
+    }];
 }
 
 - (void)hideRefresh

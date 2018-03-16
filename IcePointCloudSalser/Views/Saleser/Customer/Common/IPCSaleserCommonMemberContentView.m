@@ -10,6 +10,7 @@
 #import "IPCSaleserCustomerUpgradeMemberView.h"
 #import "IPCSaleserMemberAlertView.h"
 #import "IPCSaleserMemberInfoView.h"
+#import "IPCScanCodeViewController.h"
 
 @interface IPCSaleserCommonMemberContentView()
 
@@ -19,6 +20,7 @@
 @property (strong, nonatomic)   IPCSaleserMemberAlertView *memberAlertView;
 @property (strong, nonatomic)   IPCSaleserMemberInfoView * memberInfoView;
 @property (strong, nonatomic)   IPCSaleserCustomerUpgradeMemberView * customerUpgraderView;
+@property (nonatomic, strong) IPCPortraitNavigationViewController * cameraNav;
 
 @end
 
@@ -169,6 +171,11 @@
 - (IPCSaleserCustomerUpgradeMemberView *)customerUpgraderView{
     if (!_customerUpgraderView) {
         _customerUpgraderView = [[IPCSaleserCustomerUpgradeMemberView alloc]init];
+        [[_customerUpgraderView rac_signalForSelector:@selector(upgradeMemberAction:)] subscribeNext:^(RACTuple * _Nullable x) {
+            if ([self.delegate respondsToSelector:@selector(upgradeMember)]) {
+                [self.delegate upgradeMember];
+            }
+        }];
     }
     return _customerUpgraderView;
 }
@@ -176,19 +183,25 @@
 #pragma mark //Clicked Events
 - (void)validationMemberAction:(id)sender
 {
-//    __weak typeof(self) weakSelf = self;
-//    IPCScanCodeViewController *scanVc = [[IPCScanCodeViewController alloc] initWithFinish:^(NSString *result, NSError *error) {
-//        __strong typeof(weakSelf) strongSelf = weakSelf;
-//                [strongSelf.cameraNav dismissViewControllerAnimated:YES completion:nil];
-//                [weakSelf validationMemberRequest:result];
-//    }];
-//        self.cameraNav = [[IPCPortraitNavigationViewController alloc]initWithRootViewController:scanVc];
-//        [self presentViewController:self.cameraNav  animated:YES completion:nil];
+    IPCScanCodeViewController *scanVc = [[IPCScanCodeViewController alloc] initWithFinish:^(NSString *result, NSError *error)
+    {
+        [self.cameraNav dismissViewControllerAnimated:YES completion:nil];
+        
+        if ([self.delegate respondsToSelector:@selector(validationMember:)]) {
+            [self.delegate validationMember:result];
+        }
+    }];
+    self.cameraNav = [[IPCPortraitNavigationViewController alloc]initWithRootViewController:scanVc];
+    [[IPCAppManager sharedManager].currentLevelViewController presentViewController:self.cameraNav  animated:YES completion:nil];
 }
 
 ///强制验证通过
-- (void)compulsoryVerificationAction:(id)sender {
-  
+- (void)compulsoryVerificationAction:(id)sender
+{
+    [IPCPayOrderManager sharedManager].isValiateMember = YES;
+    [IPCPayOrderManager sharedManager].memberCheckType = @"COMPEL";
+    [IPCPayOrderManager sharedManager].customDiscount = [[IPCShoppingCart sharedCart] customDiscount];
+    [self loadCustomerMemberInfoView:[self.dataSource isSelectMemberStatus]];
 }
 
 
@@ -237,7 +250,7 @@
         }];
         
         if (![IPCPayOrderManager sharedManager].currentCustomerId && ![IPCPayOrderManager sharedManager].currentMemberCustomerId) {
-//            [self.memberAlertView updateUI:isSelectMemberStatus];
+            [self.memberAlertView updateUI:[self.dataSource isSelectMemberStatus]];
         }
     }
 }

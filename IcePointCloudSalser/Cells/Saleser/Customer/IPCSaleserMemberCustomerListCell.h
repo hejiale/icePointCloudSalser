@@ -10,4 +10,9 @@
 
 @interface IPCSaleserMemberCustomerListCell : UITableViewCell
 
+@property (weak, nonatomic) IBOutlet UILabel *customerNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *sexLabel;
+@property (weak, nonatomic) IBOutlet UILabel *phoneLabel;
+@property (copy, nonatomic) IPCCustomerMode * customerMode;
+
 @end
